@@ -63,7 +63,11 @@ const toolComponents = {
   'weather': defineAsyncComponent(() => import('../tools/Weather.vue')),
   'what-to-eat': defineAsyncComponent(() => import('../tools/WhatToEat.vue')),
   'password': defineAsyncComponent(() => import('../tools/Password.vue')),
-  'lottery': defineAsyncComponent(() => import('../tools/Lottery.vue'))
+  'lottery': defineAsyncComponent(() => import('../tools/Lottery.vue')),
+  'prompt-library': defineAsyncComponent(() => import('../tools/PromptLibrary.vue')),
+  'token-counter': defineAsyncComponent(() => import('../tools/TokenCounter.vue')),
+  'ai-prompt-gen': defineAsyncComponent(() => import('../tools/AiPromptGen.vue')),
+  'prompt-optimizer': defineAsyncComponent(() => import('../tools/PromptOptimizer.vue'))
 }
 
 if (tool.value && toolComponents[tool.value.id]) {

@@ -4,7 +4,8 @@ export const categories = [
   { id: 'text', name: '文本工具', icon: '📝', color: 'bg-blue-500' },
   { id: 'dev', name: '开发工具', icon: '💻', color: 'bg-green-500' },
   { id: 'data', name: '数据换算', icon: '🔢', color: 'bg-yellow-500' },
-  { id: 'life', name: '生活工具', icon: '🏠', color: 'bg-purple-500' }
+  { id: 'life', name: '生活工具', icon: '🏠', color: 'bg-purple-500' },
+  { id: 'ai', name: 'AI工具', icon: '🤖', color: 'bg-indigo-500' }
 ]
 
 export const tools = [
@@ -168,6 +169,36 @@ export const tools = [
     description: '输入名单进行随机抽奖',
     category: 'life',
     icon: '🎰'
+  },
+  {
+    id: 'prompt-library',
+    name: 'Prompt模板库',
+    description: '收集常用AI提示词，一键复制',
+    category: 'ai',
+    icon: '📚',
+    hot: true
+  },
+  {
+    id: 'token-counter',
+    name: 'Token估算器',
+    description: '估算文本的Token数量',
+    category: 'ai',
+    icon: '🔢'
+  },
+  {
+    id: 'ai-prompt-gen',
+    name: 'AI绘画提示词',
+    description: '生成Midjourney/Stable Diffusion提示词',
+    category: 'ai',
+    icon: '🎨',
+    hot: true
+  },
+  {
+    id: 'prompt-optimizer',
+    name: 'Prompt优化器',
+    description: '优化和格式化提示词结构',
+    category: 'ai',
+    icon: '✨'
   }
 ]
 
