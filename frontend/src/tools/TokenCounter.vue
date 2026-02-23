@@ -80,8 +80,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 
+const toast = inject('toast')
 const text = ref('')
 const model = ref('gpt4o')
 
@@ -147,8 +148,9 @@ const pasteText = async () => {
   try {
     const clipText = await navigator.clipboard.readText()
     text.value = clipText
+    toast.value?.show('已粘贴文本', 'success')
   } catch {
-    alert('无法读取剪贴板')
+    toast.value?.show('无法读取剪贴板', 'error')
   }
 }
 </script>

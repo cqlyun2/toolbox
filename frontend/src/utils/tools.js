@@ -199,6 +199,28 @@ export const tools = [
     description: '优化和格式化提示词结构',
     category: 'ai',
     icon: '✨'
+  },
+  {
+    id: 'lorem-gen',
+    name: '文本占位符',
+    description: '生成占位文本，支持中英文',
+    category: 'text',
+    icon: '📄'
+  },
+  {
+    id: 'regex-tester',
+    name: '正则测试器',
+    description: '在线测试正则表达式',
+    category: 'dev',
+    icon: '🔍',
+    hot: true
+  },
+  {
+    id: 'hash-gen',
+    name: '哈希生成器',
+    description: '计算MD5、SHA等哈希值',
+    category: 'dev',
+    icon: '#️⃣'
   }
 ]
 

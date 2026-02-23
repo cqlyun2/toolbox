@@ -29,7 +29,7 @@
       </div>
     </div>
     
-    <div class="flex space-x-2 overflow-x-auto pb-2">
+    <div class="flex flex-wrap gap-2">
       <button 
         v-for="cat in categories" 
         :key="cat.id"
@@ -39,7 +39,7 @@
           category === cat.id ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'
         ]"
       >
-        {{ cat.name }}
+        {{ cat.icon }} {{ cat.name }}
       </button>
     </div>
     
@@ -48,6 +48,13 @@
       <div class="text-3xl font-bold text-gray-800">{{ result }}</div>
       <div class="text-sm text-gray-500 mt-2">{{ fromUnit }} → {{ toUnit }}</div>
     </div>
+    
+    <button 
+      @click="swapUnits"
+      class="w-full py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
+    >
+      交换单位
+    </button>
   </div>
 </template>
 
@@ -60,15 +67,25 @@ const toUnit = ref('')
 const category = ref('length')
 
 const categories = [
-  { id: 'length', name: '长度' },
-  { id: 'weight', name: '重量' },
-  { id: 'temperature', name: '温度' }
+  { id: 'length', name: '长度', icon: '📏' },
+  { id: 'weight', name: '重量', icon: '⚖️' },
+  { id: 'temperature', name: '温度', icon: '🌡️' },
+  { id: 'area', name: '面积', icon: '📐' },
+  { id: 'volume', name: '体积', icon: '🧊' },
+  { id: 'speed', name: '速度', icon: '🚀' },
+  { id: 'data', name: '数据存储', icon: '💾' },
+  { id: 'time', name: '时间', icon: '⏱️' }
 ]
 
 const units = {
-  length: ['米', '千米', '厘米', '毫米', '英寸', '英尺'],
-  weight: ['克', '千克', '毫克', '磅', '盎司'],
-  temperature: ['摄氏度', '华氏度', '开尔文']
+  length: ['米', '千米', '厘米', '毫米', '英寸', '英尺', '码', '英里'],
+  weight: ['克', '千克', '毫克', '吨', '磅', '盎司', '斤', '两'],
+  temperature: ['摄氏度', '华氏度', '开尔文'],
+  area: ['平方米', '平方千米', '平方厘米', '公顷', '亩', '平方英尺', '平方英里'],
+  volume: ['升', '毫升', '立方米', '立方厘米', '加仑', '品脱'],
+  speed: ['米/秒', '千米/时', '英里/时', '节', '马赫'],
+  data: ['B', 'KB', 'MB', 'GB', 'TB', 'PB'],
+  time: ['秒', '分钟', '小时', '天', '周', '月', '年']
 }
 
 const currentUnits = computed(() => units[category.value] || [])
@@ -80,10 +97,29 @@ watch(category, () => {
 
 const conversions = {
   length: {
-    '米': 1, '千米': 1000, '厘米': 0.01, '毫米': 0.001, '英寸': 0.0254, '英尺': 0.3048
+    '米': 1, '千米': 1000, '厘米': 0.01, '毫米': 0.001, 
+    '英寸': 0.0254, '英尺': 0.3048, '码': 0.9144, '英里': 1609.344
   },
   weight: {
-    '克': 1, '千克': 1000, '毫克': 0.001, '磅': 453.592, '盎司': 28.3495
+    '克': 1, '千克': 1000, '毫克': 0.001, '吨': 1000000, 
+    '磅': 453.592, '盎司': 28.3495, '斤': 500, '两': 50
+  },
+  area: {
+    '平方米': 1, '平方千米': 1000000, '平方厘米': 0.0001,
+    '公顷': 10000, '亩': 666.667, '平方英尺': 0.0929, '平方英里': 2589988
+  },
+  volume: {
+    '升': 1, '毫升': 0.001, '立方米': 1000, '立方厘米': 0.001,
+    '加仑': 3.785, '品脱': 0.473
+  },
+  speed: {
+    '米/秒': 1, '千米/时': 0.2778, '英里/时': 0.447, '节': 0.514, '马赫': 340
+  },
+  data: {
+    'B': 1, 'KB': 1024, 'MB': 1048576, 'GB': 1073741824, 'TB': 1099511627776, 'PB': 1125899906842624
+  },
+  time: {
+    '秒': 1, '分钟': 60, '小时': 3600, '天': 86400, '周': 604800, '月': 2592000, '年': 31536000
   }
 }
 
@@ -96,7 +132,12 @@ const result = computed(() => {
   if (!conv || !conv[fromUnit.value] || !conv[toUnit.value]) return '-'
   
   const baseValue = value.value * conv[fromUnit.value]
-  return (baseValue / conv[toUnit.value]).toFixed(6).replace(/\.?0+$/, '')
+  const res = baseValue / conv[toUnit.value]
+  
+  if (res < 0.01 || res > 1000000) {
+    return res.toExponential(4)
+  }
+  return res.toFixed(6).replace(/\.?0+$/, '')
 })
 
 const convertTemperature = () => {
@@ -112,4 +153,9 @@ const convertTemperature = () => {
   
   return result.toFixed(2)
 }
-</script>
+
+const swapUnits = () => {
+  const temp = fromUnit.value
+  fromUnit.value = toUnit.value
+  toUnit.value = temp
+}

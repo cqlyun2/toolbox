@@ -126,8 +126,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 
+const toast = inject('toast')
 const password = ref('')
 const passwords = ref([])
 const length = ref(16)
@@ -148,7 +149,7 @@ const generate = () => {
   if (options.value.symbols) chars += customSymbols.value
   
   if (!chars) {
-    alert('请至少选择一种字符类型')
+    toast.value?.show('请至少选择一种字符类型', 'warning')
     return
   }
   
@@ -193,12 +194,12 @@ const strengthBarClass = computed(() => {
 const copyPassword = async () => {
   if (password.value) {
     await navigator.clipboard.writeText(password.value)
-    alert('已复制到剪贴板')
+    toast.value?.show('已复制到剪贴板', 'success')
   }
 }
 
 const copyToClipboard = async (text) => {
   await navigator.clipboard.writeText(text)
-  alert('已复制到剪贴板')
+  toast.value?.show('已复制到剪贴板', 'success')
 }
 </script>

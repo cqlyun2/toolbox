@@ -16,18 +16,12 @@
       >
         {{ rolling ? '决定中...' : '开始选择' }}
       </button>
-      <button 
-        @click="addCustom"
-        class="px-6 py-3 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-all"
-      >
-        添加选项
-      </button>
     </div>
     
     <div class="border-t pt-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="font-medium text-gray-700">选择分类</h3>
-        <div class="flex space-x-2">
+        <div class="flex flex-wrap gap-2">
           <button 
             v-for="cat in categories" 
             :key="cat.name"
@@ -54,9 +48,24 @@
       </div>
     </div>
     
-    <div v-if="customFoods.length > 0" class="border-t pt-6">
+    <div class="border-t pt-6">
       <h3 class="font-medium text-gray-700 mb-4">自定义选项</h3>
-      <div class="flex flex-wrap gap-2">
+      <div class="flex space-x-2 mb-4">
+        <input 
+          v-model="customInput"
+          type="text"
+          class="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500"
+          placeholder="输入自定义选项，如：肯德基"
+          @keyup.enter="addCustom"
+        />
+        <button 
+          @click="addCustom"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all"
+        >
+          添加
+        </button>
+      </div>
+      <div v-if="customFoods.length > 0" class="flex flex-wrap gap-2">
         <div 
           v-for="(food, index) in customFoods" 
           :key="index"
@@ -112,6 +121,7 @@ const selectedCategory = ref('全部')
 const currentFood = ref({ name: '点击开始', icon: '❓', desc: '让命运决定你今天吃什么' })
 const rolling = ref(false)
 const customFoods = ref([])
+const customInput = ref('')
 
 const filteredFoods = computed(() => {
   if (selectedCategory.value === '全部') return foods
@@ -122,6 +132,11 @@ const startRoll = () => {
   rolling.value = true
   
   const allFoods = [...filteredFoods.value, ...customFoods.value.map(f => ({ name: f, icon: '🍽️', desc: '自定义选项' }))]
+  
+  if (allFoods.length === 0) {
+    rolling.value = false
+    return
+  }
   
   let count = 0
   const interval = setInterval(() => {
@@ -136,9 +151,10 @@ const startRoll = () => {
 }
 
 const addCustom = () => {
-  const food = prompt('请输入自定义选项：')
-  if (food && food.trim()) {
-    customFoods.value.push(food.trim())
+  const food = customInput.value.trim()
+  if (food && !customFoods.value.includes(food)) {
+    customFoods.value.push(food)
+    customInput.value = ''
   }
 }
 

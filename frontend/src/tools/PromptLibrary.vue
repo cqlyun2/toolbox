@@ -85,8 +85,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 
+const toast = inject('toast')
 const searchQuery = ref('')
 const selectedCategory = ref('all')
 const showModal = ref(false)
@@ -406,7 +407,7 @@ const filteredPrompts = computed(() => {
 
 const copyPrompt = async (content) => {
   await navigator.clipboard.writeText(content)
-  alert('已复制到剪贴板')
+  toast.value?.show('已复制到剪贴板', 'success')
 }
 
 const usePrompt = (prompt) => {

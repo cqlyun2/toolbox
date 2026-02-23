@@ -156,12 +156,14 @@
         </div>
       </div>
     </div>
+    <Toast ref="toastRef" />
   </div>
 </template>
 
 <script setup>
 import { ref, provide, onMounted } from 'vue'
 import axios from 'axios'
+import Toast from './components/Toast.vue'
 
 const searchQuery = ref('')
 const isDark = ref(false)
@@ -171,10 +173,12 @@ const showUserMenu = ref(false)
 const isRegister = ref(false)
 const loading = ref(false)
 const loginForm = ref({ username: '', password: '', email: '', confirmPassword: '' })
+const toastRef = ref(null)
 
 provide('searchQuery', searchQuery)
 provide('isDark', isDark)
 provide('user', userInfo)
+provide('toast', toastRef)
 
 onMounted(async () => {
   const savedDark = localStorage.getItem('darkMode')
@@ -201,12 +205,12 @@ const toggleDark = () => {
 
 const handleAuth = async () => {
   if (!loginForm.value.username || !loginForm.value.password) {
-    alert('请填写用户名和密码')
+    toastRef.value?.show('请填写用户名和密码', 'warning')
     return
   }
   
   if (isRegister.value && loginForm.value.password !== loginForm.value.confirmPassword) {
-    alert('两次密码输入不一致')
+    toastRef.value?.show('两次密码输入不一致', 'warning')
     return
   }
   
@@ -223,8 +227,9 @@ const handleAuth = async () => {
     userInfo.value = res.data.user
     showLoginModal.value = false
     loginForm.value = { username: '', password: '', email: '', confirmPassword: '' }
+    toastRef.value?.show(isRegister.value ? '注册成功' : '登录成功', 'success')
   } catch (error) {
-    alert(error.response?.data?.error || '操作失败')
+    toastRef.value?.show(error.response?.data?.error || '操作失败', 'error')
   } finally {
     loading.value = false
   }

@@ -23,7 +23,7 @@
       </div>
     </div>
     
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between flex-wrap gap-4">
       <div class="flex space-x-2">
         <button 
           @click="mode = 'encode'"
@@ -44,19 +44,34 @@
           解码
         </button>
       </div>
-      <button 
-        @click="copyOutput"
-        class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
-      >
-        复制结果
-      </button>
+      <div class="flex space-x-2">
+        <button 
+          @click="clearAll"
+          class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
+        >
+          清空
+        </button>
+        <button 
+          @click="swapInput"
+          class="px-4 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-all"
+        >
+          交换
+        </button>
+        <button 
+          @click="copyOutput"
+          class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
+        >
+          复制结果
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, inject } from 'vue'
 
+const toast = inject('toast')
 const input = ref('')
 const mode = ref('encode')
 
@@ -74,9 +89,19 @@ const output = computed(() => {
 })
 
 const copyOutput = async () => {
-  if (output.value) {
+  if (output.value && !output.value.startsWith('解码失败')) {
     await navigator.clipboard.writeText(output.value)
-    alert('已复制到剪贴板')
+    toast.value?.show('已复制到剪贴板', 'success')
   }
 }
-</script>
+
+const clearAll = () => {
+  input.value = ''
+}
+
+const swapInput = () => {
+  if (output.value && !output.value.startsWith('解码失败')) {
+    input.value = output.value
+    mode.value = mode.value === 'encode' ? 'decode' : 'encode'
+  }
+}

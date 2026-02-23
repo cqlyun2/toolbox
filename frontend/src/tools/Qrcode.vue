@@ -158,9 +158,10 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed, onMounted, inject } from 'vue'
 import QRCode from 'qrcode'
 
+const toast = inject('toast')
 const contentTypes = [
   { value: 'url', label: '网址', icon: '🔗' },
   { value: 'tel', label: '电话', icon: '📞' },
@@ -176,7 +177,7 @@ const darkColor = ref('#000000')
 const lightColor = ref('#ffffff')
 const canvasRef = ref(null)
 
-const urlInput = ref('https://www.baidu.com')
+const urlInput = ref('')
 const textInput = ref('')
 const telInput = ref('')
 const smsTel = ref('')
@@ -286,9 +287,9 @@ const copyImage = async () => {
     await navigator.clipboard.write([
       new ClipboardItem({ 'image/png': blob })
     ])
-    alert('已复制到剪贴板')
+    toast.value?.show('已复制到剪贴板', 'success')
   } catch (error) {
-    alert('复制失败，请尝试下载图片')
+    toast.value?.show('复制失败，请尝试下载图片', 'error')
   }
 }
 

@@ -79,7 +79,10 @@ const toolComponents = {
   'prompt-library': defineAsyncComponent(() => import('../tools/PromptLibrary.vue')),
   'token-counter': defineAsyncComponent(() => import('../tools/TokenCounter.vue')),
   'ai-prompt-gen': defineAsyncComponent(() => import('../tools/AiPromptGen.vue')),
-  'prompt-optimizer': defineAsyncComponent(() => import('../tools/PromptOptimizer.vue'))
+  'prompt-optimizer': defineAsyncComponent(() => import('../tools/PromptOptimizer.vue')),
+  'lorem-gen': defineAsyncComponent(() => import('../tools/LoremGen.vue')),
+  'regex-tester': defineAsyncComponent(() => import('../tools/RegexTester.vue')),
+  'hash-gen': defineAsyncComponent(() => import('../tools/HashGen.vue'))
 }
 
 if (tool.value && toolComponents[tool.value.id]) {
