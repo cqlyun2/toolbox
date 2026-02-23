@@ -5,6 +5,7 @@ import { fileURLToPath } from 'url'
 import imageRoutes from './routes/image.js'
 import pdfRoutes from './routes/pdf.js'
 import textRoutes from './routes/text.js'
+import authRoutes from './routes/auth.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -23,6 +24,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/image', imageRoutes)
 app.use('/api/pdf', pdfRoutes)
 app.use('/api/text', textRoutes)
+app.use('/api/auth', authRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

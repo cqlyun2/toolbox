@@ -1,28 +1,38 @@
 <template>
   <div>
-    <router-link to="/" class="text-blue-500 hover:underline mb-4 inline-block">
+    <router-link to="/" :class="['hover:underline mb-4 inline-block', isDark ? 'text-blue-400' : 'text-blue-500']">
       ← 返回首页
     </router-link>
     
-    <div class="bg-white rounded-2xl shadow-sm p-6 mt-4">
-      <div class="flex items-center space-x-4 mb-6">
-        <div 
-          :class="[
-            'w-16 h-16 rounded-xl flex items-center justify-center text-3xl',
-            getCategoryColor(tool?.category)
-          ]"
+    <div :class="['rounded-2xl shadow-sm p-6 mt-4 transition-colors duration-300', isDark ? 'bg-gray-800' : 'bg-white']">
+      <div class="flex items-center justify-between mb-6">
+        <div class="flex items-center space-x-4">
+          <div 
+            :class="[
+              'w-16 h-16 rounded-xl flex items-center justify-center text-3xl',
+              getCategoryColor(tool?.category)
+            ]"
+          >
+            {{ tool?.icon }}
+          </div>
+          <div>
+            <h1 :class="['text-2xl font-bold', isDark ? 'text-white' : 'text-gray-800']">{{ tool?.name }}</h1>
+            <p :class="['mt-1', isDark ? 'text-gray-400' : 'text-gray-500']">{{ tool?.description }}</p>
+          </div>
+        </div>
+        <button 
+          v-if="tool"
+          @click="toggleFavorite"
+          :class="['text-2xl transition-all', isFavorite ? 'text-yellow-500' : (isDark ? 'text-gray-500 hover:text-gray-400' : 'text-gray-300 hover:text-gray-400')]"
+          :title="isFavorite ? '取消收藏' : '添加收藏'"
         >
-          {{ tool?.icon }}
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold text-gray-800">{{ tool?.name }}</h1>
-          <p class="text-gray-500 mt-1">{{ tool?.description }}</p>
-        </div>
+          {{ isFavorite ? '⭐' : '☆' }}
+        </button>
       </div>
       
-      <div class="border-t pt-6">
+      <div :class="['border-t pt-6', isDark ? 'border-gray-700' : 'border-gray-100']">
         <component :is="toolComponent" v-if="toolComponent" :tool="tool" />
-        <div v-else class="text-center py-12 text-gray-500">
+        <div v-else :class="['text-center py-12', isDark ? 'text-gray-400' : 'text-gray-500']">
           该工具正在开发中...
         </div>
       </div>
@@ -31,11 +41,13 @@
 </template>
 
 <script setup>
-import { computed, shallowRef, defineAsyncComponent } from 'vue'
+import { computed, shallowRef, defineAsyncComponent, inject, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getToolById, categories } from '../utils/tools'
 
 const route = useRoute()
+const isDark = inject('isDark')
+const user = inject('user')
 
 const tool = computed(() => getToolById(route.params.id))
 
@@ -78,4 +90,45 @@ const getCategoryColor = (categoryId) => {
   const cat = categories.find(c => c.id === categoryId)
   return cat ? cat.color : 'bg-gray-500'
 }
+
+const favorites = computed(() => {
+  const saved = localStorage.getItem('favorites')
+  return saved ? JSON.parse(saved) : []
+})
+
+const isFavorite = computed(() => {
+  return tool.value && favorites.value.includes(tool.value.id)
+})
+
+const toggleFavorite = () => {
+  if (!tool.value) return
+  let favs = [...favorites.value]
+  if (isFavorite.value) {
+    favs = favs.filter(id => id !== tool.value.id)
+  } else {
+    favs.push(tool.value.id)
+  }
+  localStorage.setItem('favorites', JSON.stringify(favs))
+  window.dispatchEvent(new Event('favorites-changed'))
+}
+
+const saveToHistory = () => {
+  if (!tool.value) return
+  let history = JSON.parse(localStorage.getItem('toolHistory') || '[]')
+  history = history.filter(id => id !== tool.value.id)
+  history.unshift(tool.value.id)
+  history = history.slice(0, 20)
+  localStorage.setItem('toolHistory', JSON.stringify(history))
+}
+
+watch(tool, () => {
+  if (tool.value && toolComponents[tool.value.id]) {
+    toolComponent.value = toolComponents[tool.value.id]
+  }
+  saveToHistory()
+})
+
+onMounted(() => {
+  saveToHistory()
+})
 </script>

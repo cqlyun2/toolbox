@@ -15,6 +15,21 @@ const routes = [
     path: '/tool/:id',
     name: 'Tool',
     component: () => import('../views/Tool.vue')
+  },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: () => import('../views/Favorites.vue')
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: () => import('../views/History.vue')
+  },
+  {
+    path: '/feedback',
+    name: 'Feedback',
+    component: () => import('../views/Feedback.vue')
   }
 ]
 

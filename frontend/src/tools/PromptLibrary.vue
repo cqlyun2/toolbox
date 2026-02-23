@@ -22,7 +22,7 @@
         <div class="flex items-start justify-between mb-2">
           <div>
             <h3 class="font-medium text-gray-800">{{ prompt.title }}</h3>
-            <span class="text-xs px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded">{{ prompt.category }}</span>
+            <span :class="['text-xs px-2 py-0.5 rounded', getCategoryColor(prompt.category)]">{{ prompt.category }}</span>
           </div>
           <button 
             @click="copyPrompt(prompt.content)"
@@ -93,7 +93,21 @@ const showModal = ref(false)
 const selectedPrompt = ref(null)
 const editableContent = ref('')
 
-const promptCategories = ['写作', '编程', '翻译', '营销', '学习', '创意']
+const promptCategories = ['写作', '编程', '翻译', '营销', '学习', '创意', '生图', '生视频']
+
+const getCategoryColor = (category) => {
+  const colors = {
+    '写作': 'bg-blue-100 text-blue-600',
+    '编程': 'bg-green-100 text-green-600',
+    '翻译': 'bg-purple-100 text-purple-600',
+    '营销': 'bg-orange-100 text-orange-600',
+    '学习': 'bg-yellow-100 text-yellow-600',
+    '创意': 'bg-pink-100 text-pink-600',
+    '生图': 'bg-indigo-100 text-indigo-600',
+    '生视频': 'bg-red-100 text-red-600'
+  }
+  return colors[category] || 'bg-gray-100 text-gray-600'
+}
 
 const prompts = [
   {
@@ -200,44 +214,6 @@ const prompts = [
   },
   {
     id: 7,
-    title: '标题生成器',
-    category: '写作',
-    description: '生成吸引人的标题',
-    content: `请为以下内容生成10个吸引人的标题：
-
-内容摘要：[摘要]
-目标读者：[读者群体]
-风格要求：[专业/轻松/有趣/严肃]
-
-要求：
-1. 标题要有吸引力
-2. 包含关键词
-3. 长度适中（15-30字）`,
-    tags: ['标题', '写作', '内容']
-  },
-  {
-    id: 8,
-    title: 'SWOT分析',
-    category: '营销',
-    description: '进行SWOT分析',
-    content: `请对[产品/公司/项目]进行SWOT分析：
-
-背景信息：
-- 名称：[名称]
-- 行业：[行业]
-- 主要竞争对手：[竞争对手]
-
-请分析：
-1. Strengths（优势）
-2. Weaknesses（劣势）
-3. Opportunities（机会）
-4. Threats（威胁）
-
-并给出战略建议。`,
-    tags: ['分析', '战略', '商业']
-  },
-  {
-    id: 9,
     title: '角色扮演',
     category: '创意',
     description: '让AI扮演特定角色',
@@ -255,7 +231,7 @@ const prompts = [
     tags: ['角色', '创意', '对话']
   },
   {
-    id: 10,
+    id: 8,
     title: 'Bug修复助手',
     category: '编程',
     description: '帮助定位和修复代码问题',
@@ -279,44 +255,136 @@ const prompts = [
     tags: ['Bug', '调试', '修复']
   },
   {
+    id: 9,
+    title: 'Midjourney通用提示词',
+    category: '生图',
+    description: 'Midjourney高质量出图模板',
+    content: `[主体描述], [风格], [氛围], [光影], [构图], [画质关键词]
+
+示例：
+A beautiful young woman with long flowing hair, standing in a cherry blossom garden, anime style, soft pink atmosphere, golden hour lighting, portrait composition, 8K, highly detailed --ar 2:3 --v 6`,
+    tags: ['MJ', '绘画', 'AI绘图']
+  },
+  {
+    id: 10,
+    title: '人物肖像生图',
+    category: '生图',
+    description: '生成高质量人物肖像',
+    content: `[人物描述], [表情], [服装], [发型], [姿势], [背景], [风格]portrait, [画质]photorealistic, [光影]lighting
+
+示例：
+Portrait of a confident businesswoman in her 30s, warm smile, wearing elegant navy suit, professional studio background, soft lighting, sharp focus, 8K quality, cinematic style`,
+    tags: ['人物', '肖像', '写实']
+  },
+  {
     id: 11,
-    title: '邮件撰写',
-    category: '写作',
-    description: '撰写专业邮件',
-    content: `请帮我写一封邮件：
+    title: '风景场景生图',
+    category: '生图',
+    description: '生成壮丽的自然风景',
+    content: `[场景描述], [时间], [天气], [视角], [氛围], [风格]landscape, [画质]quality
 
-邮件类型：[商务/求职/感谢/道歉/其他]
-收件人：[收件人身份]
-主题：[邮件主题]
-主要内容：[要表达的内容]
-语气：[正式/友好/严肃]
-
-要求：
-1. 结构清晰
-2. 语言得体
-3. 简洁明了`,
-    tags: ['邮件', '商务', '沟通']
+示例：
+Majestic mountain range at sunrise, golden light piercing through clouds, reflection in crystal clear lake, dramatic sky, wide angle view, photorealistic, 8K, HDR, cinematic composition`,
+    tags: ['风景', '自然', '写实']
   },
   {
     id: 12,
-    title: 'API文档生成',
-    category: '编程',
-    description: '生成API接口文档',
-    content: `请为以下API生成文档：
+    title: '二次元风格生图',
+    category: '生图',
+    description: '生成动漫/二次元风格图片',
+    content: `[角色描述], anime style, [服装], [动作], [背景], [表情], [色调], detailed, vibrant colors
 
-接口信息：
-- 请求方法：[GET/POST/PUT/DELETE]
-- 接口路径：[路径]
-- 功能描述：[描述]
-- 请求参数：[参数列表]
-- 响应格式：[格式]
+示例：
+Cute anime girl with pink hair, wearing school uniform, standing under cherry blossom tree, gentle smile, soft pink petals falling, kawaii style, detailed illustration, pastel colors`,
+    tags: ['动漫', '二次元', '插画']
+  },
+  {
+    id: 13,
+    title: '产品设计生图',
+    category: '生图',
+    description: '生成产品渲染图',
+    content: `[产品描述], product photography, [材质], [颜色], [背景], [光影], 3D render, [画质], studio lighting
 
-请生成包含以下内容的API文档：
-1. 接口说明
-2. 请求参数表格
-3. 响应示例
-4. 错误码说明`,
-    tags: ['API', '文档', '开发']
+示例：
+Modern minimalist smartphone design, sleek metal body in space gray, floating on pure white background, soft studio lighting, product photography, 4K, professional render, octane render`,
+    tags: ['产品', '设计', '渲染']
+  },
+  {
+    id: 14,
+    title: '国风插画生图',
+    category: '生图',
+    description: '生成中国风插画',
+    content: `[主体描述], Chinese traditional painting style, [元素], [色调], ink wash painting, elegant, [氛围]
+
+示例：
+Elegant Chinese lady in hanfu, playing guqin in traditional pavilion, surrounded by lotus flowers, misty mountains in background, Chinese ink wash painting style, soft pastel colors, serene atmosphere`,
+    tags: ['国风', '水墨', '传统']
+  },
+  {
+    id: 15,
+    title: 'Sora视频生成提示词',
+    category: '生视频',
+    description: 'OpenAI Sora视频生成模板',
+    content: `[场景描述], [动作描述], [运镜方式], [氛围], [时长]duration, [风格]
+
+示例：
+A golden retriever running through a field of sunflowers, slow motion, camera following from behind, warm afternoon light, joyful atmosphere, cinematic quality, 10 seconds clip`,
+    tags: ['Sora', '视频', 'AI视频']
+  },
+  {
+    id: 16,
+    title: '人物动作视频',
+    category: '生视频',
+    description: '生成人物动作视频',
+    content: `A [人物描述] [动作描述], [场景], [光影], [运镜], [氛围], high quality video
+
+示例：
+A young woman in white dress dancing gracefully in a sunlit meadow, slow motion, camera circling around her, golden hour lighting, dreamy atmosphere, cinematic quality, smooth motion`,
+    tags: ['人物', '动作', '舞蹈']
+  },
+  {
+    id: 17,
+    title: '场景转场视频',
+    category: '生视频',
+    description: '生成场景转换效果',
+    content: `[起始场景] transitioning to [目标场景], [转场方式], [氛围变化], smooth transition, cinematic
+
+示例：
+Sunset over ocean waves, transitioning to starry night sky, time-lapse effect, peaceful to mysterious atmosphere, smooth cinematic transition, 4K quality`,
+    tags: ['转场', '场景', '特效']
+  },
+  {
+    id: 18,
+    title: '自然风光视频',
+    category: '生视频',
+    description: '生成自然风光延时视频',
+    content: `[自然场景], time-lapse, [时间变化], [天气变化], cinematic drone shot, [氛围], 4K quality
+
+示例：
+Majestic waterfall in lush rainforest, time-lapse from dawn to dusk, changing light, rainbow forming in mist, drone aerial shot, peaceful nature documentary style, 4K cinematic`,
+    tags: ['自然', '延时', '航拍']
+  },
+  {
+    id: 19,
+    title: '产品展示视频',
+    category: '生视频',
+    description: '生成产品宣传视频',
+    content: `[产品描述], product showcase, [动作/旋转], [背景], studio lighting, professional, [风格]
+
+示例：
+Luxury watch rotating slowly on black surface, light reflecting on gold case and diamond bezel, minimalist black background, professional product video, smooth rotation, elegant presentation`,
+    tags: ['产品', '展示', '商业']
+  },
+  {
+    id: 20,
+    title: '可灵/Runway提示词',
+    category: '生视频',
+    description: '国内视频生成模型通用模板',
+    content: `[主体描述], [动作], [场景], [镜头运动], [氛围], [画质要求]
+
+示例：
+可爱的小猫在花园里追逐蝴蝶，阳光透过树叶洒下斑驳光影，镜头跟随小猫移动，温馨治愈的氛围，高清画质，流畅自然`,
+    tags: ['可灵', 'Runway', '国内模型']
   }
 ]
 

@@ -58,12 +58,12 @@
           <label class="block text-sm text-gray-600 mb-1">画面比例</label>
           <select v-model="aspectRatio" class="w-full px-4 py-2 border rounded-lg">
             <option value="">不指定</option>
-            <option value="--ar 1:1">1:1 正方形</option>
-            <option value="--ar 4:3">4:3 标准</option>
-            <option value="--ar 16:9">16:9 宽屏</option>
-            <option value="--ar 9:16">9:16 竖屏</option>
-            <option value="--ar 2:3">2:3 人像</option>
-            <option value="--ar 3:2">3:2 风景</option>
+            <option value="1:1">1:1 正方形</option>
+            <option value="4:3">4:3 标准</option>
+            <option value="16:9">16:9 宽屏</option>
+            <option value="9:16">9:16 竖屏</option>
+            <option value="2:3">2:3 人像</option>
+            <option value="3:2">3:2 风景</option>
           </select>
         </div>
       </div>
@@ -72,8 +72,20 @@
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-medium text-gray-700">生成结果</h3>
           <select v-model="outputFormat" class="text-sm px-3 py-1 border rounded">
-            <option value="midjourney">Midjourney</option>
-            <option value="stable">Stable Diffusion</option>
+            <optgroup label="国际模型">
+              <option value="midjourney">Midjourney</option>
+              <option value="stable">Stable Diffusion</option>
+              <option value="dalle">DALL-E</option>
+            </optgroup>
+            <optgroup label="国内模型">
+              <option value="tongyi">通义万相 (阿里)</option>
+              <option value="wenxin">文心一格 (百度)</option>
+              <option value="hunyuan">腾讯混元</option>
+              <option value="doubao">豆包 (字节)</option>
+              <option value="kling">可灵 (快手)</option>
+              <option value="zhipu">智谱清言</option>
+              <option value="xinhua">新华妙笔</option>
+            </optgroup>
           </select>
         </div>
         
@@ -125,7 +137,7 @@ const lighting = ref('')
 const aspectRatio = ref('')
 const outputFormat = ref('midjourney')
 
-const styles = ['写实', '动漫', '油画', '水彩', '赛博朋克', '科幻', '奇幻', '复古', '极简', '3D渲染', '像素风', '素描']
+const styles = ['写实', '动漫', '油画', '水彩', '赛博朋克', '科幻', '奇幻', '复古', '极简', '3D渲染', '像素风', '素描', '国画', '浮世绘']
 const qualities = ['高清', '4K', '8K', '超细节', '电影级', '照片级', '精细', '锐利', 'HDR']
 const lightings = ['自然光', '黄金时刻', '蓝色时刻', '霓虹灯', '柔光', '硬光', '逆光', '侧光', '顶光']
 
@@ -187,52 +199,143 @@ const templates = [
     lighting: '蓝色时刻'
   },
   { 
-    name: '像素角色', 
-    icon: '👾',
-    subject: '像素风格的勇士角色',
-    styles: ['像素风'],
-    qualities: ['精细'],
-    lighting: ''
+    name: '国风插画', 
+    icon: '🖼️',
+    subject: '古风仙子，飘带飞舞，云端仙境',
+    styles: ['国画'],
+    qualities: ['高清', '精细'],
+    lighting: '柔光'
   }
 ]
 
-const styleMap = {
-  '写实': 'realistic, photorealistic',
-  '动漫': 'anime style, manga style',
-  '油画': 'oil painting, impasto',
-  '水彩': 'watercolor painting',
-  '赛博朋克': 'cyberpunk, neon lights',
-  '科幻': 'sci-fi, futuristic',
-  '奇幻': 'fantasy, magical',
-  '复古': 'vintage, retro style',
-  '极简': 'minimalist, simple',
-  '3D渲染': '3D render, octane render',
-  '像素风': 'pixel art, 8-bit',
-  '素描': 'pencil sketch, drawing'
+const styleKeywords = {
+  midjourney: {
+    '写实': 'realistic, photorealistic',
+    '动漫': 'anime style, manga style',
+    '油画': 'oil painting, impasto',
+    '水彩': 'watercolor painting',
+    '赛博朋克': 'cyberpunk, neon lights',
+    '科幻': 'sci-fi, futuristic',
+    '奇幻': 'fantasy, magical',
+    '复古': 'vintage, retro style',
+    '极简': 'minimalist, simple',
+    '3D渲染': '3D render, octane render',
+    '像素风': 'pixel art, 8-bit',
+    '素描': 'pencil sketch, drawing',
+    '国画': 'Chinese painting, ink wash painting',
+    '浮世绘': 'ukiyo-e style'
+  },
+  tongyi: {
+    '写实': '写实风格，照片级真实感',
+    '动漫': '动漫风格，二次元',
+    '油画': '油画质感，艺术风格',
+    '水彩': '水彩画风格，清新淡雅',
+    '赛博朋克': '赛博朋克风格，霓虹灯光',
+    '科幻': '科幻风格，未来感',
+    '奇幻': '奇幻风格，魔幻色彩',
+    '复古': '复古风格，怀旧感',
+    '极简': '极简风格，简洁明快',
+    '3D渲染': '3D渲染效果，立体感强',
+    '像素风': '像素风格，复古游戏感',
+    '素描': '素描风格，铅笔画',
+    '国画': '中国国画风格，水墨画',
+    '浮世绘': '浮世绘风格，日本传统'
+  },
+  wenxin: {
+    '写实': '写实主义，超高清实拍感',
+    '动漫': '二次元动漫风格',
+    '油画': '油画艺术风格',
+    '水彩': '水彩画艺术风格',
+    '赛博朋克': '赛博朋克未来都市',
+    '科幻': '科幻未来主义风格',
+    '奇幻': '奇幻魔幻风格',
+    '复古': '复古怀旧风格',
+    '极简': '极简主义设计',
+    '3D渲染': '3D立体渲染效果',
+    '像素风': '像素艺术风格',
+    '素描': '素描手绘风格',
+    '国画': '中国传统水墨画',
+    '浮世绘': '日本浮世绘风格'
+  }
 }
 
-const qualityMap = {
-  '高清': 'high definition, HD',
-  '4K': '4K, ultra HD',
-  '8K': '8K resolution',
-  '超细节': 'highly detailed, intricate details',
-  '电影级': 'cinematic, movie quality',
-  '照片级': 'photorealistic, photo quality',
-  '精细': 'fine details, detailed',
-  '锐利': 'sharp focus',
-  'HDR': 'HDR, high dynamic range'
+const qualityKeywords = {
+  midjourney: {
+    '高清': 'high definition, HD',
+    '4K': '4K, ultra HD',
+    '8K': '8K resolution',
+    '超细节': 'highly detailed, intricate details',
+    '电影级': 'cinematic, movie quality',
+    '照片级': 'photorealistic, photo quality',
+    '精细': 'fine details, detailed',
+    '锐利': 'sharp focus',
+    'HDR': 'HDR, high dynamic range'
+  },
+  tongyi: {
+    '高清': '高清画质',
+    '4K': '4K超高清',
+    '8K': '8K极致清晰',
+    '超细节': '超精细细节',
+    '电影级': '电影级画质',
+    '照片级': '照片级真实',
+    '精细': '精细刻画',
+    '锐利': '锐利清晰',
+    'HDR': 'HDR高动态范围'
+  },
+  wenxin: {
+    '高清': '高清画质',
+    '4K': '4K超清',
+    '8K': '8K超高清',
+    '超细节': '极致细节表现',
+    '电影级': '电影级画面质感',
+    '照片级': '照片级真实感',
+    '精细': '精细描绘',
+    '锐利': '画面锐利清晰',
+    'HDR': 'HDR高动态效果'
+  }
 }
 
-const lightingMap = {
-  '自然光': 'natural lighting',
-  '黄金时刻': 'golden hour lighting',
-  '蓝色时刻': 'blue hour lighting',
-  '霓虹灯': 'neon lighting',
-  '柔光': 'soft lighting',
-  '硬光': 'hard lighting',
-  '逆光': 'backlight, rim lighting',
-  '侧光': 'side lighting',
-  '顶光': 'top lighting'
+const lightingKeywords = {
+  midjourney: {
+    '自然光': 'natural lighting',
+    '黄金时刻': 'golden hour lighting',
+    '蓝色时刻': 'blue hour lighting',
+    '霓虹灯': 'neon lighting',
+    '柔光': 'soft lighting',
+    '硬光': 'hard lighting',
+    '逆光': 'backlight, rim lighting',
+    '侧光': 'side lighting',
+    '顶光': 'top lighting'
+  },
+  tongyi: {
+    '自然光': '自然光线',
+    '黄金时刻': '黄金时刻光线',
+    '蓝色时刻': '蓝色时刻氛围',
+    '霓虹灯': '霓虹灯光效果',
+    '柔光': '柔和光线',
+    '硬光': '硬朗光线',
+    '逆光': '逆光效果',
+    '侧光': '侧光照明',
+    '顶光': '顶光照射'
+  },
+  wenxin: {
+    '自然光': '自然光线照射',
+    '黄金时刻': '日落黄金光线',
+    '蓝色时刻': '暮色蓝调氛围',
+    '霓虹灯': '霓虹灯光效果',
+    '柔光': '柔和光线下',
+    '硬光': '硬光照射',
+    '逆光': '逆光剪影效果',
+    '侧光': '侧面光线',
+    '顶光': '顶部光源'
+  }
+}
+
+const getKeywords = (map) => {
+  const format = ['tongyi', 'wenxin', 'hunyuan', 'doubao', 'kling', 'zhipu', 'xinhua'].includes(outputFormat.value) 
+    ? outputFormat.value 
+    : 'midjourney'
+  return map[format] || map['midjourney']
 }
 
 const generatedPrompt = computed(() => {
@@ -241,6 +344,9 @@ const generatedPrompt = computed(() => {
   }
   
   const parts = []
+  const styleMap = getKeywords(styleKeywords)
+  const qualityMap = getKeywords(qualityKeywords)
+  const lightingMap = getKeywords(lightingKeywords)
   
   if (subject.value) {
     parts.push(subject.value)
@@ -261,7 +367,7 @@ const generatedPrompt = computed(() => {
   let prompt = parts.join(', ')
   
   if (outputFormat.value === 'midjourney' && aspectRatio.value) {
-    prompt += ` ${aspectRatio.value}`
+    prompt += ` --ar ${aspectRatio.value}`
   }
   
   return prompt

@@ -2,14 +2,14 @@
   <div>
     <div class="flex items-center space-x-4 mb-8 overflow-x-auto pb-2">
       <button 
-        v-for="cat in categories" 
+        v-for="cat in allCategories" 
         :key="cat.id"
         @click="selectedCategory = cat.id"
         :class="[
           'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
           selectedCategory === cat.id 
             ? 'bg-blue-500 text-white' 
-            : 'bg-white text-gray-600 hover:bg-gray-100'
+            : (isDark ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-600 hover:bg-gray-100')
         ]"
       >
         <span class="mr-1">{{ cat.icon }}</span>
@@ -18,8 +18,8 @@
     </div>
 
     <section v-if="selectedCategory === 'all'">
-      <h2 class="text-xl font-bold text-gray-800 mb-4">🔥 热门工具</h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+      <h2 :class="['text-xl font-bold mb-4', isDark ? 'text-white' : 'text-gray-800']">🔥 热门工具</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         <ToolCard 
           v-for="tool in hotTools" 
           :key="tool.id" 
@@ -29,27 +29,36 @@
     </section>
 
     <section>
-      <h2 class="text-xl font-bold text-gray-800 mb-4">
+      <h2 :class="['text-xl font-bold mb-4', isDark ? 'text-white' : 'text-gray-800']">
         {{ selectedCategory === 'all' ? '全部工具' : getCategoryName(selectedCategory) }}
       </h2>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <ToolCard 
           v-for="tool in displayedTools" 
           :key="tool.id" 
           :tool="tool" 
         />
       </div>
+      <div v-if="displayedTools.length === 0" :class="['text-center py-12', isDark ? 'text-gray-400' : 'text-gray-500']">
+        没有找到相关工具
+      </div>
     </section>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, inject, watch } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { categories, tools, getToolsByCategory } from '../utils/tools'
 import ToolCard from '../components/ToolCard.vue'
 
 const selectedCategory = ref('all')
 const searchQuery = inject('searchQuery')
+const isDark = inject('isDark')
+
+const allCategories = [
+  { id: 'all', name: '全部', icon: '📋' },
+  ...categories
+]
 
 const hotTools = computed(() => tools.filter(t => t.hot))
 
