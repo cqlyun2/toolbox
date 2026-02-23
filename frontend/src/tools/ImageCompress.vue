@@ -145,3 +145,4 @@ const reset = () => {
   compressedSize.value = 0
   originalFile = null
 }
+</script>

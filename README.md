@@ -1,6 +1,10 @@
-# 工具箱 - 在线实用工具集合
+# 雲歌工具小站
 
-一个类似腾讯帮小忙风格的在线工具箱网站，包含多种实用工具。
+一个类似腾讯帮小忙风格的在线工具箱网站，提供多种实用工具。
+
+## 网站地址
+
+https://yunge.org.cn
 
 ## 技术栈
 
@@ -68,28 +72,21 @@ npm run dev
 
 | 分类 | 工具 |
 |------|------|
-| 图片工具 | 图片压缩、调整尺寸、格式转换 |
-| PDF工具 | PDF转Word、Word转PDF、PDF合并 |
-| 文本工具 | 字数统计、JSON格式化 |
-| 开发工具 | Base64编解码、URL编解码、时间戳转换、UUID生成 |
+| 图片工具 | 图片压缩、调整尺寸、格式转换、图片裁剪 |
+| PDF工具 | PDF转Word、Word转PDF、PDF合并、PDF拆分 |
+| 文本工具 | 字数统计、JSON格式化、文本占位符 |
+| 开发工具 | Base64编解码、URL编解码、时间戳转换、UUID生成、正则测试器、哈希生成器 |
 | 数据换算 | 单位换算、进制转换 |
-| 生活工具 | 二维码生成、颜色选择器 |
+| 生活工具 | 二维码生成、颜色选择器、天气查询、今天吃什么、密码生成器、随机抽奖 |
+| AI工具 | Prompt模板库、Token估算器、AI绘画提示词、Prompt优化器 |
 
-## API 接口
+## 功能特性
 
-### 图片处理
-- `POST /api/image/compress` - 图片压缩
-- `POST /api/image/resize` - 调整尺寸
-- `POST /api/image/convert` - 格式转换
-
-### PDF处理
-- `POST /api/pdf/word-to-pdf` - Word转PDF
-- `POST /api/pdf/merge` - PDF合并
-
-### 文本处理
-- `POST /api/text/count` - 字数统计
-- `POST /api/text/format-json` - JSON格式化
-- `POST /api/text/base64` - Base64编解码
+- 用户注册/登录
+- 工具收藏
+- 使用历史记录
+- 深色模式
+- 响应式设计
 
 ## License
 
