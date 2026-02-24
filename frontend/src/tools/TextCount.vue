@@ -82,3 +82,4 @@ const stats = computed(() => {
 const clearText = () => {
   text.value = ''
 }
+</script>
