@@ -69,9 +69,9 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, inject } from 'vue'
+import { ref, computed } from 'vue'
+import { ElMessage } from 'element-plus'
 
-const toast = inject('toast')
 const input = ref('')
 const mode = ref('encode')
 
@@ -91,7 +91,7 @@ const output = computed(() => {
 const copyOutput = async () => {
   if (output.value && !output.value.startsWith('解码失败')) {
     await navigator.clipboard.writeText(output.value)
-    toast.value?.show('已复制到剪贴板', 'success')
+    ElMessage.success('已复制到剪贴板')
   }
 }
 
@@ -105,3 +105,4 @@ const swapInput = () => {
     mode.value = mode.value === 'encode' ? 'decode' : 'encode'
   }
 }
+</script>

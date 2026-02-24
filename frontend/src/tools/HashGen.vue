@@ -96,9 +96,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 const input = ref('')
 const hashes = ref({
   md5: '',
@@ -238,14 +237,14 @@ watch(input, calculateHashes)
 const copyHash = async (hash) => {
   if (hash) {
     await navigator.clipboard.writeText(hash)
-    toast.value?.show('已复制哈希值', 'success')
+    ElMessage.success('已复制哈希值')
   }
 }
 
 const copyAllHashes = async () => {
   const text = `MD5: ${hashes.value.md5}\nSHA-1: ${hashes.value.sha1}\nSHA-256: ${hashes.value.sha256}\nSHA-512: ${hashes.value.sha512}`
   await navigator.clipboard.writeText(text)
-  toast.value?.show('已复制全部哈希值', 'success')
+  ElMessage.success('已复制全部哈希值')
 }
 
 const clearInput = () => {

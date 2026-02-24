@@ -158,10 +158,9 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted, inject } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import QRCode from 'qrcode'
-
-const toast = inject('toast')
+import { ElMessage } from 'element-plus'
 const contentTypes = [
   { value: 'url', label: '网址', icon: '🔗' },
   { value: 'tel', label: '电话', icon: '📞' },
@@ -283,13 +282,13 @@ const copyImage = async () => {
   if (!canvasRef.value || !qrContent.value) return
   
   try {
-    const blob = await new Promise(resolve => canvasRef.value.toBlob(resolve))
+const blob = await new Promise(resolve => canvasRef.value.toBlob(resolve))
     await navigator.clipboard.write([
       new ClipboardItem({ 'image/png': blob })
     ])
-    toast.value?.show('已复制到剪贴板', 'success')
+    ElMessage.success('已复制到剪贴板')
   } catch (error) {
-    toast.value?.show('复制失败，请尝试下载图片', 'error')
+    ElMessage.error('复制失败，请尝试下载图片')
   }
 }
 

@@ -59,9 +59,8 @@
 </template>
 
 <script setup>
-import { ref, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
 const type = ref('paragraphs')
 const count = ref(3)
 const language = ref('chinese')
@@ -155,6 +154,6 @@ const generate = () => {
 const copyResult = async () => {
   if (result.value) {
     await navigator.clipboard.writeText(result.value)
-    toast.value?.show('已复制到剪贴板', 'success')
+    ElMessage.success('已复制到剪贴板')
   }
 }

@@ -82,9 +82,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 const pattern = ref('')
 const flags = ref('g')
 const testText = ref('')
@@ -143,13 +142,13 @@ const matches = computed(() => {
 
 const applyPreset = (preset) => {
   pattern.value = preset.pattern
-  toast.value?.show(`已应用: ${preset.name}`, 'success')
+  ElMessage.success(`已应用: ${preset.name}`)
 }
 
 const copyMatches = async () => {
   if (matches.value.length > 0) {
     const text = matches.value.map(m => m[0]).join('\n')
     await navigator.clipboard.writeText(text)
-    toast.value?.show('已复制匹配结果', 'success')
+    ElMessage.success('已复制匹配结果')
   }
 }

@@ -126,9 +126,8 @@
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed } from 'vue'
+import { ElMessage } from 'element-plus'
 const password = ref('')
 const passwords = ref([])
 const length = ref(16)
@@ -148,8 +147,8 @@ const generate = () => {
   if (options.value.numbers) chars += '0123456789'
   if (options.value.symbols) chars += customSymbols.value
   
-  if (!chars) {
-    toast.value?.show('请至少选择一种字符类型', 'warning')
+if (!chars) {
+    ElMessage.warning('请至少选择一种字符类型')
     return
   }
   
@@ -194,12 +193,12 @@ const strengthBarClass = computed(() => {
 const copyPassword = async () => {
   if (password.value) {
     await navigator.clipboard.writeText(password.value)
-    toast.value?.show('已复制到剪贴板', 'success')
+    ElMessage.success('已复制到剪贴板')
   }
 }
 
 const copyToClipboard = async (text) => {
   await navigator.clipboard.writeText(text)
-  toast.value?.show('已复制到剪贴板', 'success')
+  ElMessage.success('已复制到剪贴板')
 }
 </script>

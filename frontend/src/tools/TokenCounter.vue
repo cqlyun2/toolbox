@@ -80,9 +80,8 @@
 </template>
 
 <script setup>
-import { ref, computed, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed } from 'vue'
+import { ElMessage } from 'element-plus'
 const text = ref('')
 const model = ref('gpt4o')
 
@@ -148,9 +147,9 @@ const pasteText = async () => {
   try {
     const clipText = await navigator.clipboard.readText()
     text.value = clipText
-    toast.value?.show('已粘贴文本', 'success')
+    ElMessage.success('已粘贴文本')
   } catch {
-    toast.value?.show('无法读取剪贴板', 'error')
+    ElMessage.error('无法读取剪贴板')
   }
 }
 </script>

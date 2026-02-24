@@ -58,9 +58,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 const preview = ref('')
 const compressed = ref('')
 const originalSize = ref(0)
@@ -135,7 +134,7 @@ const download = () => {
   const ext = getOutputFormat().split('/')[1]
   a.download = `compressed.${ext === 'jpeg' ? 'jpg' : ext}`
   a.click()
-  toast.value?.show('下载成功', 'success')
+  ElMessage.success('下载成功')
 }
 
 const reset = () => {

@@ -68,9 +68,8 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, inject } from 'vue'
-
-const toast = inject('toast')
+import { ref, computed, watch } from 'vue'
+import { ElMessage } from 'element-plus'
 const timestamp = ref(Date.now())
 const datetime = ref('')
 const timestampUnit = ref('ms')
@@ -132,10 +131,10 @@ const formattedDate = computed(() => {
 const copyTimestamp = async () => {
   const value = timestampUnit.value === 'ms' ? timestampMs.value : timestampS.value
   await navigator.clipboard.writeText(String(value))
-  toast.value?.show('已复制时间戳', 'success')
+  ElMessage.success('已复制时间戳')
 }
 
 const copyFormatted = async () => {
   await navigator.clipboard.writeText(formattedDate.value)
-  toast.value?.show('已复制格式化日期', 'success')
+  ElMessage.success('已复制格式化日期')
 }
