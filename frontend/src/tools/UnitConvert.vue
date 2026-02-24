@@ -159,3 +159,4 @@ const swapUnits = () => {
   fromUnit.value = toUnit.value
   toUnit.value = temp
 }
+</script>
