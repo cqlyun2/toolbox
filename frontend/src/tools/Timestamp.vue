@@ -138,3 +138,4 @@ const copyFormatted = async () => {
   await navigator.clipboard.writeText(formattedDate.value)
   ElMessage.success('已复制格式化日期')
 }
+</script>
