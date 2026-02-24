@@ -13,18 +13,7 @@
           </router-link>
           
           <div class="flex-1 max-w-xl mx-8 hidden md:block">
-            <div class="relative">
-              <input 
-                v-model="searchQuery"
-                type="text" 
-                placeholder="搜索工具..." 
-                :class="['w-full px-4 py-2 pl-10 border rounded-full focus:outline-none transition-all',
-                         isDark ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-400' : 'bg-gray-100 border-transparent focus:bg-white focus:border-blue-500']"
-              />
-              <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
+            <SearchBox v-model="searchInput" :dark-mode="isDark" />
           </div>
           
           <div class="flex items-center space-x-4">
@@ -61,18 +50,7 @@
         </div>
         
         <div class="mt-4 md:hidden">
-          <div class="relative">
-            <input 
-              v-model="searchQuery"
-              type="text" 
-              placeholder="搜索工具..." 
-              :class="['w-full px-4 py-2 pl-10 border rounded-full focus:outline-none transition-all',
-                       isDark ? 'bg-gray-700 border-gray-600 text-white focus:border-blue-400' : 'bg-gray-100 border-transparent focus:bg-white focus:border-blue-500']"
-            />
-            <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
+          <SearchBox v-model="searchInput" :dark-mode="isDark" />
         </div>
       </div>
     </header>
@@ -90,79 +68,36 @@
       </div>
     </footer>
     
-    <div v-if="showUserMenu" @click="showUserMenu = false" class="fixed inset-0 z-50">
-      <div @click.stop :class="['absolute right-4 top-16 w-48 rounded-lg shadow-lg py-2', isDark ? 'bg-gray-800' : 'bg-white']">
-        <div class="px-4 py-2 border-b" :class="isDark ? 'border-gray-700' : 'border-gray-100'">
-          <p :class="['font-medium', isDark ? 'text-white' : 'text-gray-800']">{{ userInfo?.username }}</p>
-        </div>
-        <router-link to="/favorites" @click="showUserMenu = false" :class="['block px-4 py-2 hover:bg-gray-100', isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700']">
-          ⭐ 我的收藏
-        </router-link>
-        <router-link to="/history" @click="showUserMenu = false" :class="['block px-4 py-2 hover:bg-gray-100', isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700']">
-          🕐 最近使用
-        </router-link>
-        <router-link to="/feedback" @click="showUserMenu = false" :class="['block px-4 py-2 hover:bg-gray-100', isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700']">
-          💬 意见反馈
-        </router-link>
-        <button @click="logout" class="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" :class="isDark ? 'hover:bg-gray-700' : ''">
-          退出登录
-        </button>
-      </div>
-    </div>
+    <UserMenu 
+      :visible="showUserMenu" 
+      :username="userInfo?.username"
+      :dark-mode="isDark"
+      @close="showUserMenu = false"
+      @logout="logout"
+    />
     
-    <div v-if="showLoginModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" @click.self="showLoginModal = false">
-      <div :class="['rounded-lg p-6 w-full max-w-md', isDark ? 'bg-gray-800' : 'bg-white']">
-        <div class="flex items-center justify-between mb-4">
-          <h2 :class="['text-xl font-bold', isDark ? 'text-white' : 'text-gray-800']">{{ isRegister ? '注册' : '登录' }}</h2>
-          <button @click="isRegister = !isRegister" :class="['text-sm', isDark ? 'text-blue-400' : 'text-blue-500']">
-            {{ isRegister ? '已有账号？登录' : '没有账号？注册' }}
-          </button>
-        </div>
-        <div class="space-y-4">
-          <input 
-            v-model="loginForm.username"
-            type="text" 
-            placeholder="用户名" 
-            :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
-                     isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200']"
-          />
-          <input 
-            v-if="isRegister"
-            v-model="loginForm.email"
-            type="email" 
-            placeholder="邮箱（可选）" 
-            :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
-                     isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200']"
-          />
-          <input 
-            v-model="loginForm.password"
-            type="password" 
-            placeholder="密码" 
-            :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
-                     isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200']"
-          />
-          <input 
-            v-if="isRegister"
-            v-model="loginForm.confirmPassword"
-            type="password" 
-            placeholder="确认密码" 
-            :class="['w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500',
-                     isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-gray-50 border-gray-200']"
-            @keyup.enter="handleAuth"
-          />
-          <button @click="handleAuth" :disabled="loading" class="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400">
-            {{ loading ? '处理中...' : (isRegister ? '注册' : '登录') }}
-          </button>
-        </div>
-      </div>
-    </div>
+    <LoginModal 
+      :visible="showLoginModal"
+      :is-register="isRegister"
+      :loading="loading"
+      :dark-mode="isDark"
+      @close="showLoginModal = false"
+      @toggle="isRegister = !isRegister"
+      @submit="handleAuth"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, provide, onMounted } from 'vue'
+import { ref, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
+import { debounce } from './utils'
+import SearchBox from './components/SearchBox.vue'
+import LoginModal from './components/LoginModal.vue'
+import UserMenu from './components/UserMenu.vue'
 
+const searchInput = ref('')
 const searchQuery = ref('')
 const isDark = ref(false)
 const userInfo = ref(null)
@@ -170,11 +105,18 @@ const showLoginModal = ref(false)
 const showUserMenu = ref(false)
 const isRegister = ref(false)
 const loading = ref(false)
-const loginForm = ref({ username: '', password: '', email: '', confirmPassword: '' })
 
 provide('searchQuery', searchQuery)
 provide('isDark', isDark)
 provide('user', userInfo)
+
+const debouncedSearch = debounce((value) => {
+  searchQuery.value = value
+}, 300)
+
+watch(searchInput, (newVal) => {
+  debouncedSearch(newVal)
+})
 
 onMounted(async () => {
   const savedDark = localStorage.getItem('darkMode')
@@ -199,14 +141,14 @@ const toggleDark = () => {
   localStorage.setItem('darkMode', isDark.value)
 }
 
-const handleAuth = async () => {
-  if (!loginForm.value.username || !loginForm.value.password) {
-    alert('请填写用户名和密码')
+const handleAuth = async (form) => {
+  if (!form.username || !form.password) {
+    ElMessage.warning('请填写用户名和密码')
     return
   }
   
-  if (isRegister.value && loginForm.value.password !== loginForm.value.confirmPassword) {
-    alert('两次密码输入不一致')
+  if (isRegister.value && form.password !== form.confirmPassword) {
+    ElMessage.warning('两次密码输入不一致')
     return
   }
   
@@ -214,17 +156,17 @@ const handleAuth = async () => {
   try {
     const endpoint = isRegister.value ? '/api/auth/register' : '/api/auth/login'
     const data = isRegister.value 
-      ? { username: loginForm.value.username, password: loginForm.value.password, email: loginForm.value.email }
-      : { username: loginForm.value.username, password: loginForm.value.password }
+      ? { username: form.username, password: form.password, email: form.email }
+      : { username: form.username, password: form.password }
     
     const res = await axios.post(endpoint, data)
     
     localStorage.setItem('token', res.data.token)
     userInfo.value = res.data.user
     showLoginModal.value = false
-    loginForm.value = { username: '', password: '', email: '', confirmPassword: '' }
+    ElMessage.success(isRegister.value ? '注册成功' : '登录成功')
   } catch (error) {
-    alert(error.response?.data?.error || '操作失败')
+    ElMessage.error(error.response?.data?.error || '操作失败')
   } finally {
     loading.value = false
   }
@@ -234,5 +176,6 @@ const logout = () => {
   localStorage.removeItem('token')
   userInfo.value = null
   showUserMenu.value = false
+  ElMessage.success('已退出登录')
 }
 </script>

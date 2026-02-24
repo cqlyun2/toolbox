@@ -4,13 +4,17 @@ import jwt from 'jsonwebtoken'
 import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const router = express.Router()
-const JWT_SECRET = 'yunge-toolbox-secret-key-2024'
-const USERS_FILE = path.join(__dirname, '../../data/users.json')
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key'
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d'
+const USERS_FILE = path.join(__dirname, '../../../data/users.json')
 
 const ensureUsersFile = async () => {
   try {
@@ -31,6 +35,22 @@ const saveUsers = async (users) => {
   await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2))
 }
 
+const validatePassword = (password) => {
+  if (password.length < 8) {
+    return '密码长度至少8个字符'
+  }
+  if (!/[A-Z]/.test(password)) {
+    return '密码必须包含至少一个大写字母'
+  }
+  if (!/[a-z]/.test(password)) {
+    return '密码必须包含至少一个小写字母'
+  }
+  if (!/[0-9]/.test(password)) {
+    return '密码必须包含至少一个数字'
+  }
+  return null
+}
+
 router.post('/register', async (req, res) => {
   try {
     const { username, password, email } = req.body
@@ -43,8 +63,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: '用户名长度需在2-20个字符之间' })
     }
     
-    if (password.length < 6) {
-      return res.status(400).json({ error: '密码长度至少6个字符' })
+    const passwordError = validatePassword(password)
+    if (passwordError) {
+      return res.status(400).json({ error: passwordError })
     }
     
     const users = await getUsers()
@@ -70,7 +91,7 @@ router.post('/register', async (req, res) => {
     users.push(newUser)
     await saveUsers(users)
     
-    const token = jwt.sign({ id: newUser.id, username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: newUser.id, username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
     
     res.json({
       success: true,
@@ -103,7 +124,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: '用户名或密码错误' })
     }
     
-    const token = jwt.sign({ id: user.id, username }, JWT_SECRET, { expiresIn: '7d' })
+    const token = jwt.sign({ id: user.id, username }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN })
     
     res.json({
       success: true,

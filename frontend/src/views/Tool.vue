@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, shallowRef, defineAsyncComponent, inject, watch, onMounted } from 'vue'
+import { computed, ref, shallowRef, defineAsyncComponent, inject, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getToolById, categories } from '../utils/tools'
 
@@ -91,10 +91,7 @@ const getCategoryColor = (categoryId) => {
   return cat ? cat.color : 'bg-gray-500'
 }
 
-const favorites = computed(() => {
-  const saved = localStorage.getItem('favorites')
-  return saved ? JSON.parse(saved) : []
-})
+const favorites = ref(JSON.parse(localStorage.getItem('favorites') || '[]'))
 
 const isFavorite = computed(() => {
   return tool.value && favorites.value.includes(tool.value.id)
@@ -108,6 +105,7 @@ const toggleFavorite = () => {
   } else {
     favs.push(tool.value.id)
   }
+  favorites.value = favs
   localStorage.setItem('favorites', JSON.stringify(favs))
   window.dispatchEvent(new Event('favorites-changed'))
 }
