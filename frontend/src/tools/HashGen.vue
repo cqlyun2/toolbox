@@ -250,3 +250,4 @@ const copyAllHashes = async () => {
 const clearInput = () => {
   input.value = ''
 }
+</script>
