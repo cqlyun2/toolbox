@@ -17,6 +17,13 @@
           </div>
           
           <div class="flex items-center space-x-4">
+            <router-link 
+              v-if="userInfo?.vip"
+              to="/vip"
+              class="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full text-sm font-medium"
+            >
+              VIP
+            </router-link>
             <button 
               v-if="userInfo"
               @click="showUserMenu = !showUserMenu"
@@ -24,9 +31,9 @@
               :class="isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'"
             >
               <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
-                {{ userInfo.username.charAt(0).toUpperCase() }}
+                {{ userInfo.phone?.charAt(-1) || 'U' }}
               </div>
-              <span :class="['hidden sm:inline', isDark ? 'text-white' : 'text-gray-700']">{{ userInfo.username }}</span>
+              <span :class="['hidden sm:inline', isDark ? 'text-white' : 'text-gray-700']">{{ userInfo.phone }}</span>
             </button>
             <button 
               v-else
@@ -70,33 +77,37 @@
     
     <UserMenu 
       :visible="showUserMenu" 
-      :username="userInfo?.username"
+      :username="userInfo?.phone"
       :dark-mode="isDark"
       @close="showUserMenu = false"
       @logout="logout"
+      @showVip="showVipPage"
     />
     
     <LoginModal 
       :visible="showLoginModal"
       :is-register="isRegister"
       :loading="loading"
-      :dark-mode="isDark"
+      :is-dark="isDark"
       @close="showLoginModal = false"
       @toggle="isRegister = !isRegister"
-      @submit="handleAuth"
+      @success="onLoginSuccess"
+      @showVip="showVipPage"
     />
   </div>
 </template>
 
 <script setup>
 import { ref, provide, onMounted, watch } from 'vue'
-import axios from 'axios'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { debounce } from './utils'
 import SearchBox from './components/SearchBox.vue'
 import LoginModal from './components/LoginModal.vue'
 import UserMenu from './components/UserMenu.vue'
+import request from './utils/request'
 
+const router = useRouter()
 const searchInput = ref('')
 const searchQuery = ref('')
 const isDark = ref(false)
@@ -109,6 +120,8 @@ const loading = ref(false)
 provide('searchQuery', searchQuery)
 provide('isDark', isDark)
 provide('user', userInfo)
+provide('showLogin', () => { showLoginModal.value = true })
+provide('showVip', () => { router.push('/vip') })
 
 const debouncedSearch = debounce((value) => {
   searchQuery.value = value
@@ -126,12 +139,11 @@ onMounted(async () => {
   const token = localStorage.getItem('token')
   if (token) {
     try {
-      const res = await axios.get('/api/auth/verify', {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      userInfo.value = res.data.user
+      const res = await request.get('/api/vip/info')
+      userInfo.value = res.data
     } catch {
       localStorage.removeItem('token')
+      localStorage.removeItem('user')
     }
   }
 })
@@ -141,39 +153,19 @@ const toggleDark = () => {
   localStorage.setItem('darkMode', isDark.value)
 }
 
-const handleAuth = async (form) => {
-  if (!form.username || !form.password) {
-    ElMessage.warning('请填写用户名和密码')
-    return
-  }
-  
-  if (isRegister.value && form.password !== form.confirmPassword) {
-    ElMessage.warning('两次密码输入不一致')
-    return
-  }
-  
-  loading.value = true
-  try {
-    const endpoint = isRegister.value ? '/api/auth/register' : '/api/auth/login'
-    const data = isRegister.value 
-      ? { username: form.username, password: form.password, email: form.email }
-      : { username: form.username, password: form.password }
-    
-    const res = await axios.post(endpoint, data)
-    
-    localStorage.setItem('token', res.data.token)
-    userInfo.value = res.data.user
-    showLoginModal.value = false
-    ElMessage.success(isRegister.value ? '注册成功' : '登录成功')
-  } catch (error) {
-    ElMessage.error(error.response?.data?.error || '操作失败')
-  } finally {
-    loading.value = false
-  }
+const onLoginSuccess = (user) => {
+  userInfo.value = user
+  showLoginModal.value = false
+}
+
+const showVipPage = () => {
+  showUserMenu.value = false
+  router.push('/vip')
 }
 
 const logout = () => {
   localStorage.removeItem('token')
+  localStorage.removeItem('user')
   userInfo.value = null
   showUserMenu.value = false
   ElMessage.success('已退出登录')

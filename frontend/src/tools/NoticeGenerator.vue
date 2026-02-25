@@ -114,7 +114,7 @@
           </div>
 
           <button 
-            @click="generate" 
+            @click="checkAndGenerate" 
             :disabled="loading || !form.title"
             class="w-full py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
@@ -158,8 +158,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { ElMessage } from 'element-plus'
+import request from '../utils/request'
+
+const user = inject('user')
+const showLogin = inject('showLogin')
 
 const form = ref({
   title: '',
@@ -175,6 +179,46 @@ const form = ref({
 
 const loading = ref(false)
 const result = ref('')
+const useAi = ref(true)
+
+const checkAndGenerate = async () => {
+  if (!form.value.title) {
+    ElMessage.warning('请输入通知标题')
+    return
+  }
+
+  if (useAi.value) {
+    if (!user.value) {
+      showLogin()
+      return
+    }
+    
+    loading.value = true
+    try {
+      const res = await request.post('/api/ai/generate', {
+        toolType: 'notice-generator',
+        formData: form.value
+      })
+      result.value = res.data.content
+      ElMessage.success('生成成功！')
+    } catch (e) {
+      if (e.response?.data?.needLogin) {
+        showLogin()
+      } else if (e.response?.data?.error?.includes('次数')) {
+        ElMessage.error(e.response.data.error)
+        inject('showVip')?.()
+      } else {
+        ElMessage.error(e.message || '生成失败')
+        useAi.value = false
+        generate()
+      }
+    } finally {
+      loading.value = false
+    }
+  } else {
+    generate()
+  }
+}
 
 const generate = () => {
   if (!form.value.title) {

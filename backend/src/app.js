@@ -8,6 +8,8 @@ import pdfRoutes from './routes/pdf.js'
 import textRoutes from './routes/text.js'
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
+import vipRoutes from './routes/vip.js'
+import aiRoutes from './routes/ai.js'
 
 dotenv.config()
 
@@ -38,6 +40,8 @@ app.use('/api/pdf', pdfRoutes)
 app.use('/api/text', textRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/vip', vipRoutes)
+app.use('/api/ai', aiRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)
