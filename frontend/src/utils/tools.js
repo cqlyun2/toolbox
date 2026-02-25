@@ -5,7 +5,8 @@ export const categories = [
   { id: 'dev', name: '开发工具', icon: '💻', color: 'bg-green-500' },
   { id: 'data', name: '数据换算', icon: '🔢', color: 'bg-yellow-500' },
   { id: 'life', name: '生活工具', icon: '🏠', color: 'bg-purple-500' },
-  { id: 'ai', name: 'AI工具', icon: '🤖', color: 'bg-indigo-500' }
+  { id: 'ai', name: 'AI工具', icon: '🤖', color: 'bg-indigo-500' },
+  { id: 'yugong', name: '渝工小工具', icon: '🏛️', color: 'bg-orange-500' }
 ]
 
 export const tools = [
@@ -221,6 +222,77 @@ export const tools = [
     description: '计算MD5、SHA等哈希值',
     category: 'dev',
     icon: '#️⃣'
+  },
+  {
+    id: 'notice-generator',
+    name: '通知公告生成器',
+    description: '快速生成工会通知、公告、函件',
+    category: 'yugong',
+    icon: '📢',
+    hot: true
+  },
+  {
+    id: 'report-generator',
+    name: '工作报告生成器',
+    description: '年度/季度工作总结、汇报材料',
+    category: 'yugong',
+    icon: '📊'
+  },
+  {
+    id: 'speech-generator',
+    name: '发言稿生成器',
+    description: '职代会发言、领导讲话、先进表彰',
+    category: 'yugong',
+    icon: '🎤'
+  },
+  {
+    id: 'activity-plan',
+    name: '活动策划生成器',
+    description: '文体活动、劳动竞赛、节日活动',
+    category: 'yugong',
+    icon: '🎪'
+  },
+  {
+    id: 'training-plan',
+    name: '培训方案生成器',
+    description: '职工培训、技能提升方案',
+    category: 'yugong',
+    icon: '📚'
+  },
+  {
+    id: 'employment-plan',
+    name: '就业服务方案',
+    description: '招聘会、岗位推荐、帮扶就业',
+    category: 'yugong',
+    icon: '💼'
+  },
+  {
+    id: 'wechat-assistant',
+    name: '公众号助手',
+    description: '生成微信公众号推文',
+    category: 'yugong',
+    icon: '📱'
+  },
+  {
+    id: 'video-script',
+    name: '短视频脚本',
+    description: '工会宣传视频、活动花絮脚本',
+    category: 'yugong',
+    icon: '🎬'
+  },
+  {
+    id: 'team-shuffle',
+    name: '随机分组',
+    description: '将人员随机分成若干组',
+    category: 'yugong',
+    icon: '👥'
+  },
+  {
+    id: 'roll-call',
+    name: '随机点名',
+    description: '现场随机抽取人员',
+    category: 'yugong',
+    icon: '🎯'
   }
 ]
 

@@ -82,7 +82,17 @@ const toolComponents = {
   'prompt-optimizer': defineAsyncComponent(() => import('../tools/PromptOptimizer.vue')),
   'lorem-gen': defineAsyncComponent(() => import('../tools/LoremGen.vue')),
   'regex-tester': defineAsyncComponent(() => import('../tools/RegexTester.vue')),
-  'hash-gen': defineAsyncComponent(() => import('../tools/HashGen.vue'))
+  'hash-gen': defineAsyncComponent(() => import('../tools/HashGen.vue')),
+  'notice-generator': defineAsyncComponent(() => import('../tools/NoticeGenerator.vue')),
+  'report-generator': defineAsyncComponent(() => import('../tools/ReportGenerator.vue')),
+  'speech-generator': defineAsyncComponent(() => import('../tools/SpeechGenerator.vue')),
+  'activity-plan': defineAsyncComponent(() => import('../tools/ActivityPlan.vue')),
+  'training-plan': defineAsyncComponent(() => import('../tools/TrainingPlan.vue')),
+  'employment-plan': defineAsyncComponent(() => import('../tools/EmploymentPlan.vue')),
+  'wechat-assistant': defineAsyncComponent(() => import('../tools/WechatAssistant.vue')),
+  'video-script': defineAsyncComponent(() => import('../tools/VideoScript.vue')),
+  'team-shuffle': defineAsyncComponent(() => import('../tools/TeamShuffle.vue')),
+  'roll-call': defineAsyncComponent(() => import('../tools/RollCall.vue'))
 }
 
 if (tool.value && toolComponents[tool.value.id]) {
