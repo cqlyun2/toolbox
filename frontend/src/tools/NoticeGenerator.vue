@@ -188,10 +188,11 @@ const checkAndGenerate = async () => {
   }
 
   if (useAi.value) {
-    if (!user.value) {
-      showLogin()
-      return
-    }
+    // 临时注释登录检查
+    // if (!user.value) {
+    //   showLogin()
+    //   return
+    // }
     
     loading.value = true
     try {
