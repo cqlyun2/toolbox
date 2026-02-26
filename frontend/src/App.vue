@@ -3,13 +3,13 @@
     <header :class="['shadow-sm sticky top-0 z-50 transition-colors duration-300', isDark ? 'bg-gray-800' : 'bg-white']">
       <div class="max-w-7xl mx-auto px-4 py-4">
         <div class="flex items-center justify-between">
-          <router-link to="/" class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+          <router-link to="/" class="flex items-center space-x-3 group">
+            <div class="w-10 h-10 bg-gradient-to-br from-sky-400 via-blue-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
               <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
               </svg>
             </div>
-            <span :class="['text-xl font-bold', isDark ? 'text-white' : 'text-gray-800']">雲歌工具小站</span>
+            <span :class="['text-xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent', isDark ? '' : '']">雲歌工具小站</span>
           </router-link>
           
           <div class="flex-1 max-w-xl mx-8 hidden md:block">
@@ -59,6 +59,55 @@
         <div class="mt-4 md:hidden">
           <SearchBox v-model="searchInput" :dark-mode="isDark" />
         </div>
+
+        <!-- 板块导航 -->
+        <div class="mt-4 flex space-x-2 overflow-x-auto pb-2">
+          <router-link 
+            to="/"
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all shadow-sm',
+              $route.path === '/' ? 'bg-gradient-to-r from-sky-500 to-cyan-500 text-white' : (isDark ? 'bg-gray-700 text-gray-300 hover:from-gray-600 hover:to-gray-600' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200')
+            ]"
+          >
+            🌐 Web小工具
+          </router-link>
+          <router-link 
+            to="/yugong"
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all shadow-sm',
+              $route.path === '/yugong' ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white' : (isDark ? 'bg-gray-700 text-gray-300 hover:from-gray-600 hover:to-gray-600' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200')
+            ]"
+          >
+            🏛️ 渝工小工具
+          </router-link>
+          <button 
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+              isDark ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-400 cursor-not-allowed border border-gray-200'
+            ]"
+            disabled
+          >
+            🛒 技能商店
+          </button>
+          <button 
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+              isDark ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-400 cursor-not-allowed border border-gray-200'
+            ]"
+            disabled
+          >
+            📥 工作流下载
+          </button>
+          <button 
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+              isDark ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-400 cursor-not-allowed border border-gray-200'
+            ]"
+            disabled
+          >
+            🤖 Agent
+          </button>
+        </div>
       </div>
     </header>
 
@@ -99,7 +148,7 @@
 
 <script setup>
 import { ref, provide, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { debounce } from './utils'
 import SearchBox from './components/SearchBox.vue'
@@ -108,6 +157,7 @@ import UserMenu from './components/UserMenu.vue'
 import request from './utils/request'
 
 const router = useRouter()
+const $route = useRoute()
 const searchInput = ref('')
 const searchQuery = ref('')
 const isDark = ref(false)

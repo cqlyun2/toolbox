@@ -1,39 +1,39 @@
 <template>
   <router-link 
     :to="`/tool/${tool.id}`"
-    :class="['block rounded-xl p-4 card-hover cursor-pointer border transition-colors duration-300',
-             isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100']"
+    :class="['block rounded-2xl p-6 cursor-pointer border transition-all duration-300 hover:shadow-xl hover:-translate-y-1',
+             isDark ? 'bg-gray-800/80 border-gray-700/50 hover:border-gray-600' : 'bg-white/80 border-gray-100/50 hover:border-gray-300']"
   >
-    <div class="flex items-start space-x-3">
+    <div class="flex flex-col items-center text-center">
       <div 
         :class="[
-          'w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0',
-          getCategoryColor(tool.category)
+          'w-18 h-18 rounded-2xl flex items-center justify-center text-4xl mb-4 shadow-sm',
+          color || getCategoryColor(tool.category)
         ]"
+        style="width: 72px; height: 72px;"
       >
         {{ tool.icon }}
       </div>
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <h3 :class="['font-medium truncate', isDark ? 'text-white' : 'text-gray-800']">{{ tool.name }}</h3>
-            <span 
-              v-if="tool.hot" 
-              class="px-1.5 py-0.5 bg-red-100 text-red-500 text-xs rounded-full flex-shrink-0"
-            >
-              hot
-            </span>
-          </div>
-          <button 
-            v-if="userInfo"
-            @click.prevent="toggleFavorite"
-            :class="['flex-shrink-0', isFavorite ? 'text-yellow-500' : (isDark ? 'text-gray-500' : 'text-gray-300')]"
+      <div class="w-full">
+        <div class="flex items-center justify-center gap-2">
+          <h3 :class="['font-semibold text-lg tracking-wide', isDark ? 'text-white' : 'text-gray-800']">{{ tool.name }}</h3>
+          <span 
+            v-if="tool.hot" 
+            class="px-2 py-0.5 bg-gradient-to-r from-orange-100 to-red-100 text-orange-600 text-xs rounded-full font-medium"
           >
-            {{ isFavorite ? '⭐' : '☆' }}
-          </button>
+            HOT
+          </span>
         </div>
-        <p :class="['text-sm mt-1 line-clamp-2', isDark ? 'text-gray-400' : 'text-gray-500']">{{ tool.description }}</p>
+        <p :class="['text-sm mt-3 leading-relaxed', isDark ? 'text-gray-400' : 'text-gray-500']">{{ tool.description }}</p>
       </div>
+    </div>
+    <div v-if="userInfo" class="mt-4 pt-4 border-t border-dashed" :class="isDark ? 'border-gray-700' : 'border-gray-200'">
+      <button 
+        @click.prevent="toggleFavorite"
+        :class="['w-full text-center text-sm flex items-center justify-center gap-1.5 transition-colors', isFavorite ? 'text-amber-500' : (isDark ? 'text-gray-500 hover:text-gray-400' : 'text-gray-400 hover:text-gray-500')]"
+      >
+        {{ isFavorite ? '★ 已收藏' : '☆ 收藏' }}
+      </button>
     </div>
   </router-link>
 </template>
@@ -46,6 +46,10 @@ const props = defineProps({
   tool: {
     type: Object,
     required: true
+  },
+  color: {
+    type: String,
+    default: ''
   }
 })
 

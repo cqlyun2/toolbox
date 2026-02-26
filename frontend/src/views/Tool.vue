@@ -92,7 +92,26 @@ const toolComponents = {
   'wechat-assistant': defineAsyncComponent(() => import('../tools/WechatAssistant.vue')),
   'video-script': defineAsyncComponent(() => import('../tools/VideoScript.vue')),
   'team-shuffle': defineAsyncComponent(() => import('../tools/TeamShuffle.vue')),
-  'roll-call': defineAsyncComponent(() => import('../tools/RollCall.vue'))
+  'roll-call': defineAsyncComponent(() => import('../tools/RollCall.vue')),
+  'rules-template': defineAsyncComponent(() => import('../tools/RulesTemplate.vue')),
+  'labor-law': defineAsyncComponent(() => import('../tools/LaborLaw.vue')),
+  'assistance-plan': defineAsyncComponent(() => import('../tools/AssistancePlan.vue')),
+  'mental-health': defineAsyncComponent(() => import('../tools/MentalHealth.vue')),
+  'fund-management': defineAsyncComponent(() => import('../tools/FundManagement.vue')),
+  'evaluation-plan': defineAsyncComponent(() => import('../tools/EvaluationPlan.vue')),
+  'team-building': defineAsyncComponent(() => import('../tools/TeamBuilding.vue')),
+  'holiday-care': defineAsyncComponent(() => import('../tools/HolidayCare.vue')),
+  'model-story': defineAsyncComponent(() => import('../tools/ModelStory.vue')),
+  'wage-negotiation': defineAsyncComponent(() => import('../tools/WageNegotiation.vue')),
+  'meeting-minutes': defineAsyncComponent(() => import('../tools/MeetingMinutes.vue')),
+  'news-release': defineAsyncComponent(() => import('../tools/NewsRelease.vue')),
+  'proposal': defineAsyncComponent(() => import('../tools/Proposal.vue')),
+  'sympathy-letter': defineAsyncComponent(() => import('../tools/SympathyLetter.vue')),
+  'emergency-plan': defineAsyncComponent(() => import('../tools/EmergencyPlan.vue')),
+  'collective-contract': defineAsyncComponent(() => import('../tools/CollectiveContract.vue')),
+  'budget-report': defineAsyncComponent(() => import('../tools/BudgetReport.vue')),
+  'membership': defineAsyncComponent(() => import('../tools/Membership.vue')),
+  'labor-protection': defineAsyncComponent(() => import('../tools/LaborProtection.vue'))
 }
 
 if (tool.value && toolComponents[tool.value.id]) {

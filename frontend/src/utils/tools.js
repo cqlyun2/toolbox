@@ -293,6 +293,139 @@ export const tools = [
     description: '现场随机抽取人员',
     category: 'yugong',
     icon: '🎯'
+  },
+  {
+    id: 'rules-template',
+    name: '规章制度模板',
+    description: '工会规章制度、工作管理办法',
+    category: 'yugong',
+    icon: '📋'
+  },
+  {
+    id: 'labor-law',
+    name: '劳动法律咨询',
+    description: '劳动法、工会法相关问题解答',
+    category: 'yugong',
+    icon: '⚖️'
+  },
+  {
+    id: 'assistance-plan',
+    name: '困难职工帮扶方案',
+    description: '困难职工帮扶、慰问方案',
+    category: 'yugong',
+    icon: '🤝'
+  },
+  {
+    id: 'mental-health',
+    name: '职工心理健康',
+    description: '心理健康知识、疏导方案',
+    category: 'yugong',
+    icon: '🧠'
+  },
+  {
+    id: 'fund-management',
+    name: '工会经费管理',
+    description: '经费预算、报销制度、资产管理',
+    category: 'yugong',
+    icon: '💰'
+  },
+  {
+    id: 'evaluation-plan',
+    name: '评优评先方案',
+    description: '优秀员工、先进班组评选',
+    category: 'yugong',
+    icon: '🏆'
+  },
+  {
+    id: 'team-building',
+    name: '团建活动方案',
+    description: '团队建设、户外拓展活动',
+    category: 'yugong',
+    icon: '🎳'
+  },
+  {
+    id: 'holiday-care',
+    name: '节日慰问方案',
+    description: '节假日职工慰问活动方案',
+    category: 'yugong',
+    icon: '🎁'
+  },
+  {
+    id: 'model-story',
+    name: '劳模事迹材料',
+    description: '劳动模范、先进典型事迹材料',
+    category: 'yugong',
+    icon: '🌟'
+  },
+  {
+    id: 'wage-negotiation',
+    name: '工资集体协商',
+    description: '工资协商方案、谈判要点',
+    category: 'yugong',
+    icon: '🤝'
+  },
+  {
+    id: 'meeting-minutes',
+    name: '会议纪要',
+    description: '工会会议、职代会会议纪要',
+    category: 'yugong',
+    icon: '📝'
+  },
+  {
+    id: 'news-release',
+    name: '新闻稿',
+    description: '工会活动新闻稿、通讯稿',
+    category: 'yugong',
+    icon: '📰'
+  },
+  {
+    id: 'proposal',
+    name: '职工代表提案',
+    description: '职工代表大会提案',
+    category: 'yugong',
+    icon: '📋'
+  },
+  {
+    id: 'sympathy-letter',
+    name: '慰问信',
+    description: '节日慰问信、困难职工慰问信',
+    category: 'yugong',
+    icon: '💌'
+  },
+  {
+    id: 'emergency-plan',
+    name: '应急预案',
+    description: '突发事件应急预案、安全生产预案',
+    category: 'yugong',
+    icon: '🚨'
+  },
+  {
+    id: 'collective-contract',
+    name: '集体合同',
+    description: '集体合同、劳动协议',
+    category: 'yugong',
+    icon: '📜'
+  },
+  {
+    id: 'budget-report',
+    name: '预算决算报告',
+    description: '工会经费预算、决算报告',
+    category: 'yugong',
+    icon: '📊'
+  },
+  {
+    id: 'membership',
+    name: '会员管理',
+    description: '会员发展、会籍管理',
+    category: 'yugong',
+    icon: '👥'
+  },
+  {
+    id: 'labor-protection',
+    name: '劳保用品管理',
+    description: '劳保用品发放、库存管理',
+    category: 'yugong',
+    icon: '🦺'
   }
 ]
 

@@ -50,7 +50,53 @@
 9. 随机分组
 10. 随机点名
 
-### 5. 会员系统 + AI 生成
+### 6. 渝工小工具扩展（第二晚）
+新增10个工具，共20个：
+11. 规章制度模板 (RulesTemplate.vue)
+12. 劳动法律咨询 (LaborLaw.vue)
+13. 困难职工帮扶方案 (AssistancePlan.vue)
+14. 职工心理健康 (MentalHealth.vue)
+15. 工会经费管理 (FundManagement.vue)
+16. 评优评先方案 (EvaluationPlan.vue)
+17. 团建活动方案 (TeamBuilding.vue)
+18. 节日慰问方案 (HolidayCare.vue)
+19. 劳模事迹材料 (ModelStory.vue)
+20. 工资集体协商 (WageNegotiation.vue)
+
+### 7. 渝工小工具扩展（第三晚）
+新增10个工具，共30个：
+21. 会议纪要 (MeetingMinutes.vue)
+22. 新闻稿 (NewsRelease.vue)
+23. 职工代表提案 (Proposal.vue)
+24. 慰问信 (SympathyLetter.vue)
+25. 应急预案 (EmergencyPlan.vue)
+26. 集体合同 (CollectiveContract.vue)
+27. 预算决算报告 (BudgetReport.vue)
+28. 会员管理 (Membership.vue)
+29. 劳保用品管理 (LaborProtection.vue)
+
+**新增文件**：
+- frontend/src/tools/MeetingMinutes.vue
+- frontend/src/tools/NewsRelease.vue
+- frontend/src/tools/Proposal.vue
+- frontend/src/tools/SympathyLetter.vue
+- frontend/src/tools/EmergencyPlan.vue
+- frontend/src/tools/CollectiveContract.vue
+- frontend/src/tools/BudgetReport.vue
+- frontend/src/tools/Membership.vue
+- frontend/src/tools/LaborProtection.vue
+
+**修改文件**：
+- frontend/src/utils/tools.js - 添加10个工具定义
+- frontend/src/views/Tool.vue - 注册10个新组件
+- backend/src/routes/ai.js - 添加10个AI提示模板
+
+### 8. UI界面优化
+- 新增顶部板块导航：Web小工具、渝工小工具、技能商店、工作流下载、Agent
+- 创建独立页面：YugongHome.vue（渝工小工具首页）
+- 左侧子分类导航（7个子分类：中国传统色系配色）
+- 右侧卡片式工具展示
+- 优化ToolCard组件：支持自定义颜色、更大卡片尺寸
 - 接入硅基流动 API (Token: sk-anyafxkwugtxkoffihfcwbbyafiubeypdiwbldsqkrsjyuen)
 - 余额：5.41 元
 - 模型：Qwen/Qwen2.5-7B-Instruct
@@ -82,14 +128,15 @@
 
 ## 平台规划
 
-### 四大板块
+### 五大板块
 
-| 子域名 | 说明 |
-|--------|------|
-| www.yunge.org.cn | 在线工具 |
-| skills.yunge.org.cn | Skills 商店 |
-| workflows.yunge.org.cn | 工作流下载 |
-| agent.yunge.org.cn | Agent |
+| 子域名 | 说明 | 状态 |
+|--------|------|------|
+| www.yunge.org.cn | Web小工具 | 已完成 |
+| yugong.yunge.org.cn | 渝工小工具 | 开发中 |
+| skills.yunge.org.cn | 技能商店 | 待开发 |
+| workflows.yunge.org.cn | 工作流下载 | 待开发 |
+| agent.yunge.org.cn | Agent | 待开发 |
 
 ---
 
