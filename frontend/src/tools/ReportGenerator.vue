@@ -66,40 +66,28 @@
 <script setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import request from '../utils/request'
 
 const form = ref({ title: '', period: '', summary: '', highlights: '', achievements: '', problems: '', nextPlan: '' })
 const loading = ref(false)
 const result = ref('')
 
-const generate = () => {
+const generate = async () => {
   if (!form.value.title) { ElMessage.warning('请输入报告标题'); return }
+  
   loading.value = true
-  setTimeout(() => {
-    const f = form.value
-    result.value = `${f.title}
-
-一、${f.period || '本周期'}工作概述
-
-${f.summary || '本期工作围绕企业发展中心任务，认真履行工会职能，扎实推进各项工作。'}
-
-二、主要工作回顾
-
-${f.highlights || '（一）加强组织建设，提升工会凝聚力'}
-
-${f.achievements || '1. 完善工会组织架构\n2. 加强工会干部培训\n3. 开展职工文体活动'}
-
-三、存在的不足
-
-${f.problems || '在肯定成绩的同时，我们也清醒地认识到工作中还存在一些不足，需要在今后工作中加以改进。'}
-
-四、${f.period ? f.period.replace('年度', '年度') : '新一年'}工作思路
-
-${f.nextPlan || '新的一年，我们将继续坚持服务职工宗旨，认真履行工会职能，努力开创工会工作新局面。'}
-
-${f.period || ''}年`
-    loading.value = false
+  try {
+    const res = await request.post('/api/ai/generate', {
+      toolType: 'report-generator',
+      formData: form.value
+    })
+    result.value = res.data.content
     ElMessage.success('生成成功！')
-  }, 500)
+  } catch (e) {
+    ElMessage.error(e.message || '生成失败')
+  } finally {
+    loading.value = false
+  }
 }
 
 const copyResult = () => { navigator.clipboard.writeText(result.value); ElMessage.success('已复制') }
