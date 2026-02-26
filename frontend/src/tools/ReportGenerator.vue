@@ -73,20 +73,20 @@ const loading = ref(false)
 const result = ref('')
 
 const generate = async () => {
+  alert('开始生成...')
   if (!form.value.title) { ElMessage.warning('请输入报告标题'); return }
   
   loading.value = true
   try {
-    console.log('发送请求到AI...')
     const res = await request.post('/api/ai/generate', {
       toolType: 'report-generator',
       formData: form.value
     })
-    console.log('AI返回:', res)
+    alert('返回结果: ' + JSON.stringify(res))
     result.value = res.data.content
     ElMessage.success('生成成功！')
   } catch (e) {
-    console.error('生成失败:', e)
+    alert('错误: ' + e.message)
     ElMessage.error(e.message || '生成失败')
   } finally {
     loading.value = false
