@@ -35,14 +35,10 @@ const saveUsers = (users) => {
 
 router.post('/register', (req, res) => {
   try {
-    const { phone, password, code } = req.body
+    const { phone, password } = req.body
     
     if (!phone || !password) {
       return res.status(400).json({ error: '请填写手机号和密码' })
-    }
-
-    if (code !== '666666' && code !== '1234') {
-      return res.status(400).json({ error: '验证码错误' })
     }
 
     const users = getUsers()
@@ -97,22 +93,38 @@ router.post('/login', (req, res) => {
   try {
     const { phone, password } = req.body
     
-    if (!phone || !password) {
-      return res.status(400).json({ error: '请填写手机号和密码' })
+    if (!phone) {
+      return res.status(400).json({ error: '请填写手机号' })
     }
 
     const users = getUsers()
-    const user = users.find(u => u.phone === phone)
+    let user = users.find(u => u.phone === phone)
     
     if (!user) {
-      return res.status(400).json({ error: '用户不存在' })
-    }
-
-    const [salt, key] = user.password.split(':')
-    const hashedPassword = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex')
-    
-    if (hashedPassword !== key) {
-      return res.status(400).json({ error: '密码错误' })
+      // 自动注册新用户
+      const salt = crypto.randomBytes(16).toString('hex')
+      const hashedPassword = crypto.pbkdf2Sync(password || '123456', salt, 1000, 64, 'sha512').toString('hex')
+      
+      user = {
+        id: Date.now().toString(),
+        phone,
+        password: `${salt}:${hashedPassword}`,
+        vip: true,
+        vipExpire: null,
+        vipType: 'test',
+        freeTimes: 100,
+        usedTimes: 0,
+        createdAt: new Date().toISOString()
+      }
+      users.push(user)
+      saveUsers(users)
+    } else if (password) {
+      const [salt, key] = user.password.split(':')
+      const hashedPassword = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex')
+      
+      if (hashedPassword !== key) {
+        return res.status(400).json({ error: '密码错误' })
+      }
     }
 
     const token = jwt.sign(
