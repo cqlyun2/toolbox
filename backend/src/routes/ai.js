@@ -37,9 +37,9 @@ const API_KEY = process.env.SILICONFLOW_API_KEY
 
 const TEMPLATES = {
   'notice-generator': {
-    prompt: `你是一个工会文书助手。请根据以下信息生成一份正式的通知公告：
+    prompt: `请根据以下信息生成一份工会通知公告：
 
-标题：{{title}}
+通知标题：{{title}}
 发布单位：{{organization}}
 活动时间：{{time}}
 活动地点：{{location}}
@@ -49,7 +49,7 @@ const TEMPLATES = {
 联系人：{{contact}}
 联系电话：{{phone}}
 
-请生成一份完整、规范的通知文档。`
+要求：生成一份完整、规范、正式的工会通知文档。`
   },
   'report-generator': {
     prompt: `你是一个工会工作报告助手。请根据以下信息生成一份工作报告：
