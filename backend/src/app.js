@@ -10,6 +10,7 @@ import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
 import vipRoutes from './routes/vip.js'
 import aiRoutes from './routes/ai.js'
+import skillsRoutes from './routes/skills.js'
 
 dotenv.config()
 
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/vip', vipRoutes)
 app.use('/api/ai', aiRoutes)
+app.use('/api/skills', skillsRoutes)
 
 app.use((err, req, res, next) => {
   console.error(err.stack)

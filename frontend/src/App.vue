@@ -80,6 +80,15 @@
           >
             🏛️ 渝工小工具
           </router-link>
+          <router-link 
+            to="/skills"
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all shadow-sm',
+              $route.path === '/skills' ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' : (isDark ? 'bg-gray-700 text-gray-300 hover:from-gray-600 hover:to-gray-600' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200')
+            ]"
+          >
+            🛒 Skills
+          </router-link>
           <button 
             :class="[
               'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
@@ -87,7 +96,16 @@
             ]"
             disabled
           >
-            🛒 技能商店
+            📥 工作流
+          </button>
+          <button 
+            :class="[
+              'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+              isDark ? 'bg-gray-700 text-gray-500 cursor-not-allowed' : 'bg-white text-gray-400 cursor-not-allowed border border-gray-200'
+            ]"
+            disabled
+          >
+            🤖 Agent
           </button>
           <button 
             :class="[
