@@ -395,15 +395,10 @@ router.post('/generate', async (req, res) => {
 
     const content = aiData.choices?.[0]?.message?.content || '生成失败，请重试'
 
-    user.usedTimes = (user.usedTimes || 0) + 1
-    saveUser(user)
-
     res.json({
       success: true,
       data: {
-        content,
-        usedTimes: user.usedTimes,
-        freeTimes: user.freeTimes
+        content
       }
     })
   } catch (error) {
