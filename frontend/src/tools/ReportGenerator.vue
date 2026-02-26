@@ -77,13 +77,16 @@ const generate = async () => {
   
   loading.value = true
   try {
+    console.log('发送请求到AI...')
     const res = await request.post('/api/ai/generate', {
       toolType: 'report-generator',
       formData: form.value
     })
+    console.log('AI返回:', res)
     result.value = res.data.content
     ElMessage.success('生成成功！')
   } catch (e) {
+    console.error('生成失败:', e)
     ElMessage.error(e.message || '生成失败')
   } finally {
     loading.value = false
