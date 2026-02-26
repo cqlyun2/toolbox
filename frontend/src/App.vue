@@ -161,7 +161,10 @@ const $route = useRoute()
 const searchInput = ref('')
 const searchQuery = ref('')
 const isDark = ref(false)
-const userInfo = ref(null)
+const userInfo = ref({
+  phone: '13800000000',
+  vip: true
+})
 const showLoginModal = ref(false)
 const showUserMenu = ref(false)
 const isRegister = ref(false)
