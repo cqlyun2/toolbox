@@ -338,23 +338,24 @@ const TEMPLATES = {
 
 router.post('/generate', async (req, res) => {
   try {
-    const authHeader = req.headers.authorization
-    if (!authHeader) {
-      return res.status(401).json({ error: '请先登录', needLogin: true })
-    }
+    // 临时：去掉登录限制
+    // const authHeader = req.headers.authorization
+    // if (!authHeader) {
+    //   return res.status(401).json({ error: '请先登录', needLogin: true })
+    // }
 
-    const token = authHeader.replace('Bearer ', '')
-    let decoded
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret')
-    } catch {
-      return res.status(401).json({ error: '登录已过期', needLogin: true })
-    }
+    // const token = authHeader.replace('Bearer ', '')
+    // let decoded
+    // try {
+    //   decoded = jwt.verify(token, process.env.JWT_SECRET || 'default-secret')
+    // } catch {
+    //   return res.status(401).json({ error: '登录已过期', needLogin: true })
+    // }
 
-    const user = getUser(decoded.id)
-    if (!user) {
-      return res.status(404).json({ error: '用户不存在' })
-    }
+    // const user = getUser(decoded.id)
+    // if (!user) {
+    //   return res.status(404).json({ error: '用户不存在' })
+    // }
 
     const { toolType, formData } = req.body
     
